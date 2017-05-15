@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#64818e</color>
+    <color name="colorPrimaryDark">#3f5964</color>
+    <color name="colorAccent">#698592</color>
+
+    <color name="dialogBgColor">#55000000</color>
+    <color name="svThumbColor">#26111111</color>
+    <color name="btnDefaultColor">#000000</color>
+    <color name="dialogAccept">#1E88E5</color>
+
+</resources>

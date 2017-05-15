@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Itrax</string>
+
+    <!-- Dialog message -->
+    <string name="alert_dialog_ok">OK</string>
+    <string name="alert_dialog_cancel">Cancel</string>
+    <string name="alert_dialog_setting">Settings</string>
+    <string name="please_wait">Please wait &#8230;</string>
+    <string name="no_internet_msg">This feature requires internet connection. Please check your internet settings and try again.</string>
+    <string name="no_internet_msg_main">This Application required internet connection. Please check your internet setting and try again.</string>
+    <string name="no_internet_title">No internet</string>
+
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="note">Write your note</string>
+    <string name="send">Record Location</string>
+
+
+    <string name="no_geocoder_available">No geocoder available</string>
+
+    <string name="fetch_address">Fetch address</string>
+
+    <string name="address_found">Address found</string>
+
+    <string name="no_address_found">Sorry, no address found</string>
+    <string name="no_location_data_provided">No location data provided</string>
+    <string name="service_not_available">Sorry, the service is not available</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+
+
+    <string name="no_location_detected">
+        No location detected. Make sure location is enabled on the device.
+    </string>
+    <string name="empty">empty</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept_small">accept</string>
+    <string name="logout">Logout</string>
+
+</resources>
