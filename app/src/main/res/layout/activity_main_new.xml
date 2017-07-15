@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:layout_weight="1"
+            android:text="@string/note"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_20sp" />
+
+        <TextView
+            android:id="@+id/tv_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_exit_to_app_white_24dp"
+            android:gravity="center_vertical"
+            android:text="@string/logout"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edt_customer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@drawable/drawable_write_button"
+        android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+        android:hint="@string/customer_name"
+        android:inputType="textCapSentences"
+        android:maxLength="20"
+        android:minHeight="@dimen/_40dp"
+        android:padding="@dimen/_10dp"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="@dimen/_20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@drawable/drawable_write_button"
+        android:minHeight="@dimen/_40dp"
+        android:padding="@dimen/_10dp">
+
+        <EditText
+            android:id="@+id/edt_mobile_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@android:color/transparent"
+            android:digits="0123456789"
+            android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+            android:hint="@string/mobile_number"
+            android:inputType="text|textCapCharacters|textCapWords|textCapSentences|textAutoCorrect|textAutoComplete|textMultiLine|textImeMultiLine|textNoSuggestions|textUri|textEmailAddress|textEmailSubject|textShortMessage|textLongMessage|textPersonName|textPostalAddress|textPassword|textVisiblePassword|textWebEditText|textFilter|textPhonetic|textWebEmailAddress|textWebPassword|number|numberSigned|numberDecimal|numberPassword|phone"
+            android:maxLength="10"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="@dimen/_20sp" />
+
+        <TextView
+            android:id="@+id/edt_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+            android:text="@string/check_icon"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="@dimen/_20sp" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edt_delivery_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@drawable/drawable_write_button"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+        android:hint="@string/delivery_date"
+        android:maxLength="20"
+        android:minHeight="@dimen/_40dp"
+        android:padding="@dimen/_10dp"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="@dimen/_20sp" />
+
+    <EditText
+        android:id="@+id/edt_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@drawable/drawable_write_button"
+        android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+        android:hint="@string/note"
+        android:inputType="text"
+        android:maxLength="300"
+        android:minHeight="@dimen/_200dp"
+        android:padding="@dimen/_10dp"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="@dimen/_20sp" />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@drawable/login_button"
+        android:minHeight="@dimen/_50dp"
+        android:text="@string/send"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/_20sp" />
+</LinearLayout>

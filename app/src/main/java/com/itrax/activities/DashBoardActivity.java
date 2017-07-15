@@ -1,15 +1,21 @@
 package com.itrax.activities;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,14 +78,27 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @BindView(R.id.tv_exit)
     TextView tv_exit;
 
+    static EditText edt_delivery_date;
+
+    @BindView(R.id.edt_check)
+    TextView edt_check;
+
+    @BindView(R.id.edt_customer_name)
+    EditText edt_customer_name;
+
+    @BindView(R.id.edt_mobile_number)
+    EditText edt_mobile_number;
+
     private AddressResultReceiver mResultReceiver;
     private String location;
+    private boolean isVerified = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_new);
         ButterKnife.bind(this);
+        initUI();
         buildGoogleApiClient();
         createLocationRequest();
         buildLocationSettingsRequest();
@@ -89,6 +108,12 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             startLocationUpdates();
         }
         mResultReceiver = new AddressResultReceiver(new Handler());
+    }
+
+    private void initUI() {
+        edt_check.setTypeface(Utility.getMaterialIconsRegular(this));
+        edt_delivery_date = (EditText) findViewById(R.id.edt_delivery_date);
+        isVerified = false;
     }
 
     /**
@@ -126,15 +151,24 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     }
 
     private boolean isValidFields() {
-        boolean isValid = true;
-        if (Utility.isValueNullOrEmpty(edtNote.getText().toString())) {
-            Utility.setSnackBar(edtNote, "Please enter note");
-            isValid = false;
-        } else if (mCurrentLocation == null) {
-            Utility.setSnackBar(edtNote, "Something problem with location getting. Try after some time");
-            isValid = false;
+        if (Utility.isValueNullOrEmpty(this.edt_customer_name.getText().toString())) {
+            Utility.setSnackBar(this.edt_customer_name, "Please enter customer name");
+            return false;
+        } else if (!this.isVerified) {
+            Utility.setSnackBar(this.edtNote, "Please verify your number");
+            return false;
+        } else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
+            Utility.setSnackBar(edt_delivery_date, "Please select delivery date");
+            return false;
+        } else if (Utility.isValueNullOrEmpty(this.edtNote.getText().toString())) {
+            Utility.setSnackBar(this.edtNote, "Please enter note");
+            return false;
+        } else if (this.mCurrentLocation != null) {
+            return true;
+        } else {
+            Utility.setSnackBar(this.edtNote, "Something problem with location getting. Try after some time");
+            return false;
         }
-        return isValid;
     }
 
     private void postLocationData() {
@@ -359,4 +393,80 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
+
+    public static class SelectDateFragment extends android.support.v4.app.DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar = Calendar.getInstance();
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, yy, mm, dd);
+        }
+
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+            populateSetDate(yy, mm + 1, dd);
+        }
+
+        public void populateSetDate(int year, int month, int day) {
+            DashBoardActivity.edt_delivery_date.setText(month + "/" + day + "/" + year);
+        }
+    }
+
+    private boolean isMobileNumberEntered() {
+        if (!Utility.isValueNullOrEmpty(this.edt_mobile_number.getText().toString())) {
+            return true;
+        }
+        Utility.setSnackBar(this.edt_mobile_number, "Please enter mobile number");
+        return false;
+    }
+
+    private boolean isOtp(EditText opt) {
+        if (!Utility.isValueNullOrEmpty(opt.getText().toString())) {
+            return true;
+        }
+        Utility.setSnackBar(opt, "Please enter otp");
+        return false;
+    }
+
+    private void showOtpDialog() {
+        final Dialog mDialog = new Dialog(this);
+        mDialog.requestWindowFeature(1);
+        mDialog.setContentView(R.layout.otp_dialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+        final EditText edt_otp = (EditText) mDialog.findViewById(R.id.edt_otp);
+        Button btn_ok = (Button) mDialog.findViewById(R.id.btn_ok);
+        ((Button) mDialog.findViewById(R.id.btn_cancel)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (DashBoardActivity.this.isOtp(edt_otp)) {
+                    mDialog.dismiss();
+                    Utility.showToastMessage(DashBoardActivity.this, "Success, Mobile number verified");
+                    DashBoardActivity.this.isVerified = true;
+                }
+            }
+        });
+        mDialog.show();
+    }
+
+    @OnClick({R.id.edt_check})
+    void onEdtCheck() {
+        if (isMobileNumberEntered()) {
+            showOtpDialog();
+        }
+    }
+
+    @OnClick({R.id.edt_delivery_date})
+    void onDeliveryDate() {
+        new SelectDateFragment().show(getSupportFragmentManager(), "DatePicker");
+    }
+
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -234,5 +235,9 @@ public class Utility {
         }
         return "";
 
+    }
+
+    public static Typeface getMaterialIconsRegular(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/matireal_icons_regular.ttf");
     }
 }

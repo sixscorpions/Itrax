@@ -166,6 +166,11 @@
     <dimen name="iv_profile_h_w">90dp</dimen>
 
 
+    <dimen name="txt_default_size_medium">16sp</dimen>
+    <dimen name="txt_default_size_small">16sp</dimen>
+    <dimen name="txt_default_size_very_small">15sp</dimen>
+    <dimen name="txt_toolbar_title_size">20sp</dimen>
+
     <dimen name="no_properties_text_size">22sp</dimen>
     <dimen name="_400dp">400dp</dimen>
 </resources>

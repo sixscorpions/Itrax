@@ -15,7 +15,9 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="note">Write your note</string>
-    <string name="send">Record Location</string>
+    <string name="send">Submit</string>
+
+    <string name="verify">Verify</string>
 
 
     <string name="no_geocoder_available">No geocoder available</string>
@@ -40,5 +42,14 @@
     <string name="cancel">Cancel</string>
     <string name="accept_small">accept</string>
     <string name="logout">Logout</string>
+
+    <string name="create_calendar_message">Allow Ad to create a calendar event?</string>
+    <string name="create_calendar_title">Create calendar event</string>
+    <string name="customer_name">Customer name</string>
+    <string name="decline">Decline</string>
+    <string name="delivery_date">Delivery Date</string>
+    <string name="enter_otp">Enter Otp</string>
+    <string name="check_icon">&#xE5CA;</string>
+    <string name="mobile_number">Mobile number</string>
 
 </resources>
