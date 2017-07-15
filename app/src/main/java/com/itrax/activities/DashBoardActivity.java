@@ -115,7 +115,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     private void initUI() {
         edt_check.setTypeface(Utility.getMaterialIconsRegular(this));
         edt_delivery_date = (EditText) findViewById(R.id.edt_delivery_date);
-        isVerified = true;
+        isVerified = false;
     }
 
     /**
@@ -147,20 +147,32 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
      */
     @OnClick(R.id.btn_send)
     void onBtnLoginClick() {
-        if (isValidFields()) {
-            postLocationData();
+        if (isVerified) {
+            if (isValidFields()) {
+                postLocationData();
+            }
+        } else if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString())) {
+            if (isValidFields()) {
+                postLocationData();
+            }
+        } else if (edt_mobile_number.getText().toString().length() == 10) {
+            callSendOtp();
+        } else {
+            Utility.showOKOnlyDialog(DashBoardActivity.this, "Enter 10 digits mobile number",
+                    Utility.getResourcesString(this, R.string.app_name));
         }
+
     }
 
     private boolean isValidFields() {
         if (Utility.isValueNullOrEmpty(this.edt_customer_name.getText().toString())) {
             Utility.setSnackBar(this.edt_customer_name, "Please enter customer name");
             return false;
-        } else if (!isVerified) {
+        } /*else if (!isVerified) {
             Utility.setSnackBar(this.edtNote, "Please verify your number");
             return false;
-        } else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
-            Utility.setSnackBar(edt_delivery_date, "Please select delivery date");
+        } */ else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
+            Utility.setSnackBar(edt_delivery_date, "Please select measurement date");
             return false;
         } else if (Utility.isValueNullOrEmpty(this.edtNote.getText().toString())) {
             Utility.setSnackBar(this.edtNote, "Please enter note");
@@ -185,7 +197,11 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             linkedHashMap.put("Time", Utility.getTime());
             linkedHashMap.put("Note", edtNote.getText().toString());
             linkedHashMap.put("CustomerName", edt_customer_name.getText().toString());
-            linkedHashMap.put("CustomerMobile", edt_mobile_number.getText().toString());
+            if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString())) {
+                linkedHashMap.put("CustomerMobile", "");
+            } else {
+                linkedHashMap.put("CustomerMobile", edt_mobile_number.getText().toString());
+            }
             linkedHashMap.put("DueDate", edt_delivery_date.getText().toString());
             if (isVerified)
                 linkedHashMap.put("IsOtpVerified", "true");
@@ -416,6 +432,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         public void populateSetDate(int year, int month, int day) {
             DashBoardActivity.edt_delivery_date.setText(month + "/" + day + "/" + year);
         }
+
     }
 
     private boolean isMobileNumberEntered() {
