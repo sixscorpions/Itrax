@@ -1,6 +1,7 @@
 package com.itrax.utils;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,8 +11,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itrax.R;
@@ -191,6 +196,26 @@ public class Utility {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void showOKOnlyDialog(Context context, String msg,
+                                        String title) {
+        SpannableString s = new SpannableString(msg);
+        Linkify.addLinks(s, Linkify.ALL);
+
+        AlertDialog d = new AlertDialog.Builder(context)
+                .setMessage(s)
+                .setTitle(title)
+                .setPositiveButton(R.string.alert_dialog_ok,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int whichButton) {
+                            }
+                        }).show();
+
+        ((TextView) d.findViewById(android.R.id.message))
+                .setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     /**

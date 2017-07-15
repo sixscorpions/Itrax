@@ -23,6 +23,9 @@
     <string name="fetch_address">Fetch address</string>
 
     <string name="address_found">Address found</string>
+    <string name="unauthorized_access">Unauthorized access</string>
+    <string name="please_check_with_user_name_and_password">Please check with user name and password</string>
+    <string name="number_digits">0123456789</string>
 
     <string name="no_address_found">Sorry, no address found</string>
     <string name="no_location_data_provided">No location data provided</string>

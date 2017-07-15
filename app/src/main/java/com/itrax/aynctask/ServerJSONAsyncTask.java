@@ -107,6 +107,8 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
             } else {
                 model = null;
                 caller.onComplete(model);
+                Utility.showOKOnlyDialog(mContext, Utility.getResourcesString(mContext, R.string.unauthorized_access),
+                        Utility.getResourcesString(mContext, R.string.app_name));
             }
         } catch (Exception e) {
             e.printStackTrace();
