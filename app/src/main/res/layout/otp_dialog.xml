@@ -36,7 +36,7 @@
             android:gravity="center"
             android:hint="@string/enter_otp"
             android:inputType="number|numberSigned|numberDecimal|numberPassword|phone"
-            android:maxLength="4"
+            android:maxLength="5"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/txt_default_size_medium" />
     </LinearLayout>

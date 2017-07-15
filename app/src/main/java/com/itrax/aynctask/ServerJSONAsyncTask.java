@@ -11,6 +11,7 @@ import com.itrax.utils.APIConstants;
 import com.itrax.utils.Constants;
 import com.itrax.utils.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +28,7 @@ import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +177,9 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
                 Utility.showLog("param1", "" + param1);
                 OutputStream os = connection.getOutputStream();
                 Writer writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
-                if (mUrl.contains(APIConstants.LOGIN_URL) || mUrl.contains(APIConstants.PLOTPROPOINT_URL)) {
+                if (mUrl.contains(APIConstants.LOGIN_URL)
+                        || mUrl.contains(APIConstants.CREATE_SALES_RECORD)
+                        || mUrl.contains(APIConstants.GET_SALES_OTP)) {
                     Utility.showLog("mParams", "" + getURL(mParams));
                     writer.write(getURL(mParams));
                 } else {
@@ -301,6 +305,32 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
         }
         return sb.toString();
     }
+
+    /*public static String getJsonParams(LinkedHashMap<String, String> paramMap) {
+        if (paramMap == null) {
+            return null;
+        }
+
+        JSONObject jsonObject = new JSONObject();
+        //List<NameValuePair> paramsList = new ArrayList<NameValuePair>();
+        for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+            try {
+                if (entry.getKey().equalsIgnoreCase("IsOtpVerified")) {
+                    boolean i = Boolean.valueOf(entry.getValue());
+                    jsonObject.accumulate(entry.getKey(), i);
+                } else {
+                    String i = entry.getValue();
+                    jsonObject.accumulate(entry.getKey(), i);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Utility.showLog("jsonObject", "jsonObject : " + jsonObject.toString());
+
+        return jsonObject.toString();
+    }*/
 
 }
 

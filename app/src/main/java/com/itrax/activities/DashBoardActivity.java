@@ -35,7 +35,9 @@ import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.aynctask.ServerJSONAsyncTask;
 import com.itrax.models.Model;
 import com.itrax.models.PostNoteModel;
+import com.itrax.models.SendOtpModel;
 import com.itrax.parser.PostNoteParser;
+import com.itrax.parser.SendOtpParser;
 import com.itrax.utils.APIConstants;
 import com.itrax.utils.Constants;
 import com.itrax.utils.FetchAddressIntentService;
@@ -113,7 +115,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     private void initUI() {
         edt_check.setTypeface(Utility.getMaterialIconsRegular(this));
         edt_delivery_date = (EditText) findViewById(R.id.edt_delivery_date);
-        isVerified = false;
+        isVerified = true;
     }
 
     /**
@@ -154,7 +156,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         if (Utility.isValueNullOrEmpty(this.edt_customer_name.getText().toString())) {
             Utility.setSnackBar(this.edt_customer_name, "Please enter customer name");
             return false;
-        } else if (!this.isVerified) {
+        } else if (!isVerified) {
             Utility.setSnackBar(this.edtNote, "Please verify your number");
             return false;
         } else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
@@ -174,41 +176,35 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     private void postLocationData() {
         try {
             LinkedHashMap linkedHashMap = new LinkedHashMap();
-            linkedHashMap.put("CreatedDate", getDate());
             JSONArray jsonArray = new JSONArray();
             jsonArray.put(mCurrentLocation.getLatitude());
             jsonArray.put(mCurrentLocation.getLongitude());
             linkedHashMap.put("Coordinates", jsonArray.toString());
             linkedHashMap.put("Area", location);
             linkedHashMap.put("Country", "India");
-            linkedHashMap.put("Time", getTime());
+            linkedHashMap.put("Time", Utility.getTime());
             linkedHashMap.put("Note", edtNote.getText().toString());
+            linkedHashMap.put("CustomerName", edt_customer_name.getText().toString());
+            linkedHashMap.put("CustomerMobile", edt_mobile_number.getText().toString());
+            linkedHashMap.put("DueDate", edt_delivery_date.getText().toString());
+            if (isVerified)
+                linkedHashMap.put("IsOtpVerified", "true");
+            else
+                linkedHashMap.put("IsOtpVerified", "false");
+            linkedHashMap.put("Source", "android");
+            linkedHashMap.put("InitiatedDate", Utility.getDate());
+            linkedHashMap.put("InitiatedTime", Utility.getTime());
 
             PostNoteParser mPostNoteParser = new PostNoteParser();
             ServerJSONAsyncTask serverJSONAsyncTask = new ServerJSONAsyncTask(
                     this, Utility.getResourcesString(this, R.string.please_wait), true,
-                    APIConstants.PLOTPROPOINT_URL, linkedHashMap,
+                    APIConstants.CREATE_SALES_RECORD, linkedHashMap,
                     APIConstants.REQUEST_TYPE.POST, this, mPostNoteParser);
             Utility.execute(serverJSONAsyncTask);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    private String getTime() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
-    }
-
-    private String getDate() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        String formattedDate = df.format(c.getTime());
-        return formattedDate;
-    }
-
 
     @Override
     protected void onStart() {
@@ -366,6 +362,13 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                 PostNoteModel mPostNoteModel = (PostNoteModel) model;
                 edtNote.setText("");
                 showAlertForLocationOff();
+            } else if (model instanceof SendOtpModel) {
+                SendOtpModel mSendOtpModel = (SendOtpModel) model;
+                if (mSendOtpModel != null && mSendOtpModel.isSuccess())
+                    showOtpDialog(mSendOtpModel.getOtp());
+                else
+                    Utility.showOKOnlyDialog(DashBoardActivity.this, mSendOtpModel.getMessage(),
+                            Utility.getResourcesString(DashBoardActivity.this, R.string.app_name));
             }
         }
     }
@@ -416,22 +419,31 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     }
 
     private boolean isMobileNumberEntered() {
-        if (!Utility.isValueNullOrEmpty(this.edt_mobile_number.getText().toString())) {
-            return true;
+        boolean isValidated = false;
+        if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString().trim())) {
+            Utility.setSnackBar(edt_mobile_number, "Please enter mobile number");
+            edt_mobile_number.requestFocus();
+        } else {
+            isValidated = true;
         }
-        Utility.setSnackBar(this.edt_mobile_number, "Please enter mobile number");
-        return false;
+        return isValidated;
     }
 
-    private boolean isOtp(EditText opt) {
-        if (!Utility.isValueNullOrEmpty(opt.getText().toString())) {
-            return true;
+    private boolean isOtp(EditText opt, String otpMessage) {
+        boolean isValidated = false;
+        if (Utility.isValueNullOrEmpty(opt.getText().toString().trim())) {
+            Utility.setSnackBar(opt, "Please enter otp");
+            opt.requestFocus();
+        } else if (!otpMessage.equalsIgnoreCase(opt.getText().toString())) {
+            Utility.setSnackBar(opt, "Please enter valid otp");
+            opt.requestFocus();
+        } else {
+            isValidated = true;
         }
-        Utility.setSnackBar(opt, "Please enter otp");
-        return false;
+        return isValidated;
     }
 
-    private void showOtpDialog() {
+    private void showOtpDialog(final String otpMessage) {
         final Dialog mDialog = new Dialog(this);
         mDialog.requestWindowFeature(1);
         mDialog.setContentView(R.layout.otp_dialog);
@@ -447,7 +459,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         });
         btn_ok.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (DashBoardActivity.this.isOtp(edt_otp)) {
+                if (isOtp(edt_otp, otpMessage)) {
                     mDialog.dismiss();
                     Utility.showToastMessage(DashBoardActivity.this, "Success, Mobile number verified");
                     DashBoardActivity.this.isVerified = true;
@@ -460,7 +472,24 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @OnClick({R.id.edt_check})
     void onEdtCheck() {
         if (isMobileNumberEntered()) {
-            showOtpDialog();
+            //showOtpDialog();
+            callSendOtp();
+        }
+    }
+
+    /*This call is used to send the OTP*/
+    private void callSendOtp() {
+        try {
+            LinkedHashMap linkedHashMap = new LinkedHashMap();
+            linkedHashMap.put("MobileNumber", edt_mobile_number.getText().toString());
+            SendOtpParser mSendOtpParser = new SendOtpParser();
+            ServerJSONAsyncTask serverJSONAsyncTask = new ServerJSONAsyncTask(
+                    this, Utility.getResourcesString(this, R.string.please_wait), true,
+                    APIConstants.GET_SALES_OTP, linkedHashMap,
+                    APIConstants.REQUEST_TYPE.POST, this, mSendOtpParser);
+            Utility.execute(serverJSONAsyncTask);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -22,6 +22,11 @@ import android.widget.Toast;
 
 import com.itrax.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by shankar on 4/30/2017.
  */
@@ -240,4 +245,19 @@ public class Utility {
     public static Typeface getMaterialIconsRegular(Context context) {
         return Typeface.createFromAsset(context.getAssets(), "fonts/matireal_icons_regular.ttf");
     }
+
+    public static String getTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
+
+    public static String getDate() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
+
 }
