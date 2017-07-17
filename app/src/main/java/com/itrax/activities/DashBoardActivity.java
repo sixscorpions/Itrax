@@ -171,10 +171,10 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         } /*else if (!isVerified) {
             Utility.setSnackBar(this.edtNote, "Please verify your number");
             return false;
-        } */ else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
+        }  else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
             Utility.setSnackBar(edt_delivery_date, "Please select measurement date");
             return false;
-        } else if (Utility.isValueNullOrEmpty(this.edtNote.getText().toString())) {
+        } */ else if (Utility.isValueNullOrEmpty(this.edtNote.getText().toString())) {
             Utility.setSnackBar(this.edtNote, "Please enter note");
             return false;
         } else if (this.mCurrentLocation != null) {

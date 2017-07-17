@@ -47,7 +47,7 @@
     <string name="create_calendar_title">Create calendar event</string>
     <string name="customer_name">Customer name</string>
     <string name="decline">Decline</string>
-    <string name="delivery_date">Measurement Date</string>
+    <string name="delivery_date">Next Appointment</string>
     <string name="enter_otp">Enter Otp</string>
     <string name="check_icon">&#xE5CA;</string>
     <string name="mobile_number">Mobile number</string>
