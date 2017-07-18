@@ -222,7 +222,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
@@ -236,7 +236,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         }
         updateLocationUI();
     }
-
+*/
     @Override
     protected void onPause() {
         super.onPause();
@@ -390,9 +390,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     }
 
     private void showAlertForLocationOff() {
-        new AlertDialog.Builder(DashBoardActivity.this)
+        /*new AlertDialog.Builder(DashBoardActivity.this)
                 .setTitle(Utility.getResourcesString(DashBoardActivity.this, R.string.app_name))
-                .setMessage("Data sent successfully,\nSwitch off your location to save battery")
+                .setMessage("Data sent successfully,\n<b>Switch off your location to save battery</b>")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -403,7 +403,25 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                         System.exit(0);
                     }
                 })
-                .show();
+                .show();*/
+
+        final Dialog mDialog = new Dialog(this);
+        mDialog.requestWindowFeature(1);
+        mDialog.setContentView(R.layout.data_save_dialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+        ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mDialog.dismiss();
+                Intent intent = new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                DashBoardActivity.this.startActivity(intent);
+                DashBoardActivity.this.finish();
+                System.exit(0);
+            }
+        });
+        mDialog.show();
     }
 
     @OnClick(R.id.tv_exit)
