@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Itrax</string>
+    <string name="app_name">Xtrax</string>
 
     <!-- Dialog message -->
     <string name="alert_dialog_ok">OK</string>

@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        xtrax {
+            applicationId 'com.xtrax'
+            versionName '1.0'
+            versionCode 1
+        }
+    }
 }
 
 dependencies {
