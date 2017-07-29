@@ -222,7 +222,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         }
     }
 
-    /*@Override
+    @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
@@ -236,7 +236,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         }
         updateLocationUI();
     }
-*/
+
     @Override
     protected void onPause() {
         super.onPause();
