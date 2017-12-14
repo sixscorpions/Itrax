@@ -1,9 +1,9 @@
 package com.itrax.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.ColorDrawable;
@@ -11,12 +11,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +33,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.itrax.R;
 import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.aynctask.ServerJSONAsyncTask;
+import com.itrax.models.LoginModel;
 import com.itrax.models.Model;
 import com.itrax.models.PostNoteModel;
 import com.itrax.models.SendOtpModel;
+import com.itrax.parser.LoginParser;
 import com.itrax.parser.PostNoteParser;
 import com.itrax.parser.SendOtpParser;
 import com.itrax.utils.APIConstants;
@@ -44,12 +46,14 @@ import com.itrax.utils.FetchAddressIntentService;
 import com.itrax.utils.Utility;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,9 +95,15 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @BindView(R.id.edt_mobile_number)
     EditText edt_mobile_number;
 
+    @BindView(R.id.ll_dynamic_data)
+    LinearLayout ll_dynamic_data;
+
     private AddressResultReceiver mResultReceiver;
     private String location;
     private boolean isVerified = false;
+    private LoginModel mLoginModel;
+
+    private ArrayList<EditText> views = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +126,67 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         edt_check.setTypeface(Utility.getMaterialIconsRegular(this));
         edt_delivery_date = (EditText) findViewById(R.id.edt_delivery_date);
         isVerified = false;
+
+        setDynamicData();
+    }
+
+    /**
+     * This method is used to set the dynamic data
+     */
+    private void setDynamicData() {
+        ll_dynamic_data.removeAllViews();
+        String json = Utility.getSharedPrefStringData(this, Constants.LOGIN_RESPONSE);
+        if (!Utility.isValueNullOrEmpty(json)) {
+            LoginParser loginParser = new LoginParser();
+            mLoginModel = (LoginModel) loginParser.parse(json, this);
+        }
+        isVerified = !mLoginModel.isOTPRequired();
+
+        if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
+                && mLoginModel.getDynamicFieldsModels().size() > 0) {
+            for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
+                if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Text")) {
+                    LinearLayout linearLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.edit_text_dynamic, null);
+                    EditText editText = (EditText) linearLayout.findViewById(R.id.edt_id);
+                    editText.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    views.add(editText);
+                    ll_dynamic_data.addView(linearLayout);
+                } else if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Date")) {
+                    LinearLayout linearLayout2 = (LinearLayout) getLayoutInflater().inflate(R.layout.edit_text_date_dynamic, null);
+                    final EditText editTextDate = (EditText) linearLayout2.findViewById(R.id.edt_date);
+                    editTextDate.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    editTextDate.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SelectDateFragment newFragment = new SelectDateFragment(editTextDate);
+                            newFragment.show(getSupportFragmentManager(), "DatePicker");
+                        }
+                    });
+                    views.add(editTextDate);
+                    ll_dynamic_data.addView(linearLayout2);
+                } else if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Dropdown")) {
+                    LinearLayout linearLayout3 = (LinearLayout) getLayoutInflater().inflate(R.layout.edit_text_spinner_dynamic, null);
+                    final EditText editTextSpinner = (EditText) linearLayout3.findViewById(R.id.edt_spinner);
+                    editTextSpinner.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    final String mName = mLoginModel.getDynamicFieldsModels().get(i).getLabel();
+
+                    String mListNames = mLoginModel.getDynamicFieldsModels().get(i).getList();
+                    String[] array_list = mListNames.split(", ");
+                    final List<String> stringList = new ArrayList<>();
+                    for (int k = 0; k < array_list.length; k++) {
+                        stringList.add(array_list[k]);
+                    }
+                    editTextSpinner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utility.showSpinnerDialog(DashBoardActivity.this, mName, stringList, editTextSpinner);
+                        }
+                    });
+                    views.add(editTextSpinner);
+                    ll_dynamic_data.addView(linearLayout3);
+                }
+            }
+        }
     }
 
     /**
@@ -210,6 +281,15 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             linkedHashMap.put("Source", "android");
             linkedHashMap.put("InitiatedDate", Utility.getDate());
             linkedHashMap.put("InitiatedTime", Utility.getTime());
+
+            JSONObject jsonObject = new JSONObject();
+            if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
+                    && mLoginModel.getDynamicFieldsModels().size() > 0) {
+                for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
+                    jsonObject.put(mLoginModel.getDynamicFieldsModels().get(i).getLabel(), views.get(i).getText().toString());
+                }
+                linkedHashMap.put("AdditionalInfo", jsonObject.toString());
+            }
 
             PostNoteParser mPostNoteParser = new PostNoteParser();
             ServerJSONAsyncTask serverJSONAsyncTask = new ServerJSONAsyncTask(
@@ -429,10 +509,21 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         Utility.setSharedPrefStringData(DashBoardActivity.this, Constants.LOGIN_SESSION_ID, "");
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        DashBoardActivity.this.finish();
     }
 
 
     public static class SelectDateFragment extends android.support.v4.app.DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        EditText editText;
+
+        public SelectDateFragment() {
+        }
+
+        @SuppressLint("ValidFragment")
+        public SelectDateFragment(EditText mEditText) {
+            this.editText = mEditText;
+        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -448,7 +539,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         }
 
         public void populateSetDate(int year, int month, int day) {
-            DashBoardActivity.edt_delivery_date.setText(month + "/" + day + "/" + year);
+            editText.setText(month + "/" + day + "/" + year);
         }
 
     }
@@ -530,7 +621,8 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
 
     @OnClick({R.id.edt_delivery_date})
     void onDeliveryDate() {
-        new SelectDateFragment().show(getSupportFragmentManager(), "DatePicker");
+        SelectDateFragment newFragment = new SelectDateFragment(edt_delivery_date);
+        newFragment.show(getSupportFragmentManager(), "DatePicker");
     }
 
 }

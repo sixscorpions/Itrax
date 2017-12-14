@@ -1,9 +1,17 @@
 package com.itrax.parser;
 
+import android.content.Context;
+
+import com.itrax.models.DynamicFieldsModel;
 import com.itrax.models.LoginModel;
 import com.itrax.models.Model;
+import com.itrax.utils.Constants;
+import com.itrax.utils.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by shankar on 4/30/2017.
@@ -11,7 +19,7 @@ import org.json.JSONObject;
 
 public class LoginParser implements Parser<Model> {
     @Override
-    public Model parse(String s) {
+    public Model parse(String s, Context context) {
         LoginModel loginModel = new LoginModel();
         try {
             JSONObject jsonObject = new JSONObject(s);
@@ -53,6 +61,26 @@ public class LoginParser implements Parser<Model> {
                 loginModel.setIsActive(jsonObject.optBoolean("IsActive"));
             if (jsonObject.has("VehicleNumber"))
                 loginModel.setVehicleNumber(jsonObject.optString("VehicleNumber"));
+
+            if (jsonObject.has("OTPRequired"))
+                loginModel.setOTPRequired(jsonObject.optBoolean("OTPRequired"));
+
+            ArrayList<DynamicFieldsModel> dynamicFieldsModels = new ArrayList<>();
+            if (jsonObject.has("ProFeatures")) {
+                JSONArray jsonArray = jsonObject.optJSONArray("ProFeatures");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject2 = jsonArray.optJSONObject(i);
+                    DynamicFieldsModel dynamicFieldsModel = new DynamicFieldsModel();
+                    dynamicFieldsModel.setId(jsonObject2.optInt("id"));
+                    dynamicFieldsModel.setLabel(jsonObject2.optString("Label"));
+                    dynamicFieldsModel.setType(jsonObject2.optString("Type"));
+                    dynamicFieldsModel.setList(jsonObject2.optString("List"));
+                    dynamicFieldsModels.add(dynamicFieldsModel);
+                }
+                loginModel.setDynamicFieldsModels(dynamicFieldsModels);
+            }
+
+            Utility.setSharedPrefStringData(context, Constants.LOGIN_RESPONSE, s);
 
         } catch (Exception e) {
             e.printStackTrace();

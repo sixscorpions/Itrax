@@ -16,15 +16,20 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itrax.R;
+import com.itrax.activities.BaseActivity;
+import com.itrax.adapters.SpinnerDialogAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -258,6 +263,33 @@ public class Utility {
         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
+    }
+
+    public static void showSpinnerDialog(BaseActivity parent, String title,
+                                         List<String> mList, final EditText et) {
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(parent);
+
+        /*CUSTOM TITLE*/
+        LayoutInflater inflater = (LayoutInflater) parent.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_include_dialog_header, null);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_alert_dialog_title);
+        builderSingle.setCustomTitle(view);
+        tv_title.setText(title);
+
+        final SpinnerDialogAdapter adapter = new SpinnerDialogAdapter(parent,
+                100, mList);
+        builderSingle.setAdapter(adapter,
+                new DialogInterface.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String mData = adapter.getItem(which);
+                        et.setText("" + mData);
+                    }
+                });
+        builderSingle.show();
     }
 
 }

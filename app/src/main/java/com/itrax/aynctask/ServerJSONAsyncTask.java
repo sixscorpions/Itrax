@@ -128,7 +128,7 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
     }
 
     private int getResponse(String response) {
-        model = parser.parse(response);
+        model = parser.parse(response, mContext);
         return 1;
     }
 

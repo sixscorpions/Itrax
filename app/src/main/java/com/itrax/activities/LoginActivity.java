@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.itrax.R;
 import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.aynctask.ServerJSONAsyncTask;
@@ -43,6 +41,9 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
         if (Utility.isMarshmallowOS()) {
             getLocationPermission();
         }
+
+        edtUsername.setText("7799920200");
+        edtPassword.setText("1234");
     }
 
     private void getLocationPermission() {

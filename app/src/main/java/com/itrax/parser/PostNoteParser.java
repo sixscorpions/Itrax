@@ -1,5 +1,7 @@
 package com.itrax.parser;
 
+import android.content.Context;
+
 import com.itrax.models.Model;
 import com.itrax.models.PostNoteModel;
 
@@ -11,7 +13,7 @@ import org.json.JSONObject;
 
 public class PostNoteParser implements Parser<Model> {
     @Override
-    public Model parse(String s) {
+    public Model parse(String s, Context context) {
         PostNoteModel mPostNoteModel = new PostNoteModel();
         try {
             JSONObject jsonObject = new JSONObject(s);

@@ -1,5 +1,6 @@
 package com.itrax.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,8 @@ public class LoginModel extends Model {
     private String LastUpdatedOn;
     private String UpdateBy;
     private String VehicleNumber;
+    private ArrayList<DynamicFieldsModel> dynamicFieldsModels;
+    private boolean OTPRequired;
 
     public int getId() {
         return Id;
@@ -263,5 +266,21 @@ public class LoginModel extends Model {
 
     public void setVehicleNumber(String VehicleNumber) {
         this.VehicleNumber = VehicleNumber;
+    }
+
+    public ArrayList<DynamicFieldsModel> getDynamicFieldsModels() {
+        return dynamicFieldsModels;
+    }
+
+    public void setDynamicFieldsModels(ArrayList<DynamicFieldsModel> dynamicFieldsModels) {
+        this.dynamicFieldsModels = dynamicFieldsModels;
+    }
+
+    public boolean isOTPRequired() {
+        return OTPRequired;
+    }
+
+    public void setOTPRequired(boolean OTPRequired) {
+        this.OTPRequired = OTPRequired;
     }
 }

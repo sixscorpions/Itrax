@@ -1,5 +1,7 @@
 package com.itrax.parser;
 
+import android.content.Context;
+
 import com.itrax.models.Model;
 
 /**
@@ -7,5 +9,5 @@ import com.itrax.models.Model;
  */
 public interface Parser<T extends Model> {
 
-    T parse(String s);
+    T parse(String s, Context context);
 }

@@ -1,5 +1,7 @@
 package com.itrax.parser;
 
+import android.content.Context;
+
 import com.itrax.models.LoginModel;
 import com.itrax.models.Model;
 import com.itrax.models.SendOtpModel;
@@ -12,7 +14,7 @@ import org.json.JSONObject;
 
 public class SendOtpParser implements Parser<Model> {
     @Override
-    public Model parse(String s) {
+    public Model parse(String s, Context context) {
         SendOtpModel mSendOtpModel = new SendOtpModel();
         try {
             JSONObject jsonObject = new JSONObject(s);
