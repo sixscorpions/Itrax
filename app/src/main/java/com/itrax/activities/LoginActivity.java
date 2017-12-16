@@ -36,7 +36,7 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_first_time);
         ButterKnife.bind(this);
         if (Utility.isMarshmallowOS()) {
             getLocationPermission();
