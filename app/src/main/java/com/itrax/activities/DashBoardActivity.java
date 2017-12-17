@@ -1,6 +1,7 @@
 package com.itrax.activities;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -12,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -624,5 +627,23 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         SelectDateFragment newFragment = new SelectDateFragment(edt_delivery_date);
         newFragment.show(getSupportFragmentManager(), "DatePicker");
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }

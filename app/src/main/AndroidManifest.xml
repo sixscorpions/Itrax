@@ -23,8 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DashBoardActivity" />
-        <activity android:name=".activities.LoginActivity" />
+        <activity
+            android:name=".activities.DashBoardActivity"
+            android:theme="@style/AppTheme.TitleText" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/SplashTheme" />
 
         <service
             android:name=".utils.FetchAddressIntentService"

@@ -17,7 +17,8 @@ public class APIConstants {
 
     public static String BASE_URL = "https://itraxpro.com/api/v1.0/";
     //public static String BASE_URL = "http://icuepro.com/api/v1.0/";
-    public static String LOGIN_URL = BASE_URL + "driverLogin";
+    //public static String LOGIN_URL = BASE_URL + "driverLogin";
+    public static String LOGIN_URL = BASE_URL + "executiveLogin";
     public static String PLOTPROPOINT_URL = BASE_URL + "plotProPoint";
     public static String GET_SALES_OTP = BASE_URL + "getSalesOtp";
     public static String CREATE_SALES_RECORD = BASE_URL + "createSalesRecord";

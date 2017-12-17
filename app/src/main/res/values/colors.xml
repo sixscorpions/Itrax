@@ -16,4 +16,5 @@
     <color name="text_color">#444444</color>
     <color name="border_et_unselect">#c0c0c0</color>
  <color name="login_background">#015b3f</color>
+ <color name="button">#1abc9c</color>
 </resources>

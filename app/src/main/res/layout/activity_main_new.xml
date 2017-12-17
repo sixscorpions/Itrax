@@ -20,7 +20,8 @@
                 android:layout_marginTop="@dimen/_15dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="@dimen/_10dp">
+                android:padding="@dimen/_10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="0dp"
@@ -49,7 +50,7 @@
                 android:layout_marginBottom="@dimen/_5dp"
                 android:layout_marginLeft="@dimen/_15dp"
                 android:layout_marginRight="@dimen/_15dp"
-                android:layout_marginTop="@dimen/_5dp"
+                android:layout_marginTop="@dimen/_15dp"
                 android:background="@drawable/drawable_write_button"
                 android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
                 android:hint="@string/customer_name"
@@ -147,12 +148,11 @@
                 android:layout_marginLeft="@dimen/_15dp"
                 android:layout_marginRight="@dimen/_15dp"
                 android:layout_marginTop="@dimen/_5dp"
-                android:background="@drawable/login_button"
+                android:background="@drawable/login_button_new"
                 android:minHeight="@dimen/_50dp"
                 android:text="@string/send"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/_20sp" />
-
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
