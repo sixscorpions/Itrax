@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-    flavorDimensions "default"
+
     defaultConfig {
         applicationId "com.itrax"
         minSdkVersion 16
@@ -21,8 +21,8 @@ android {
     productFlavors {
         xtrax {
             applicationId 'com.xtrax'
-            versionName '1.0'
-            versionCode 1
+            versionName '1.1'
+            versionCode 2
         }
     }
 }
