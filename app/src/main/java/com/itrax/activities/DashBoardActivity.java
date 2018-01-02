@@ -1,7 +1,6 @@
 package com.itrax.activities;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -20,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +36,10 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.itrax.R;
 import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.aynctask.ServerJSONAsyncTask;
+import com.itrax.aynctaskold.ServerIntractorAsync;
+import com.itrax.db.CreateSalesDataSource;
+import com.itrax.db.DatabaseHandler;
+import com.itrax.models.CreateSalesModel;
 import com.itrax.models.LoginModel;
 import com.itrax.models.Model;
 import com.itrax.models.PostNoteModel;
@@ -49,6 +53,7 @@ import com.itrax.utils.FetchAddressIntentService;
 import com.itrax.utils.Utility;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -101,18 +106,26 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @BindView(R.id.ll_dynamic_data)
     LinearLayout ll_dynamic_data;
 
+    @BindView(R.id.tv_off_line_count)
+    TextView tv_off_line_count;
+    @BindView(R.id.rl_count)
+    RelativeLayout rl_count;
+
     private AddressResultReceiver mResultReceiver;
     private String location;
     private boolean isVerified = false;
     private LoginModel mLoginModel;
 
     private ArrayList<EditText> views = new ArrayList<>();
+    private CreateSalesDataSource createSalesDatasource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
         ButterKnife.bind(this);
+        DatabaseHandler.getInstance(this);
+        createSalesDatasource = new CreateSalesDataSource(this);
         initUI();
         buildGoogleApiClient();
         createLocationRequest();
@@ -131,6 +144,21 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         isVerified = false;
 
         setDynamicData();
+
+        if (createSalesDatasource.getDataCount() > 0) {
+            rl_count.setVisibility(View.VISIBLE);
+            tv_off_line_count.setText("" + createSalesDatasource.getDataCount());
+        } else
+            rl_count.setVisibility(View.GONE);
+
+    }
+
+    /**
+     * This method is used for sync
+     */
+    @OnClick(R.id.rl_count)
+    void sync() {
+        postLocationData();
     }
 
     /**
@@ -223,11 +251,25 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     void onBtnLoginClick() {
         if (isVerified) {
             if (isValidFields()) {
-                postLocationData();
+                if (Utility.isNetworkAvailable(DashBoardActivity.this)) {
+                    saveInLocalDb();
+                    postLocationData();
+                } else {
+                    saveInLocalDb();
+                    edtNote.setText("");
+                    showAlertForLocationOff();
+                }
             }
         } else if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString())) {
             if (isValidFields()) {
-                postLocationData();
+                if (Utility.isNetworkAvailable(DashBoardActivity.this)) {
+                    saveInLocalDb();
+                    postLocationData();
+                } else {
+                    saveInLocalDb();
+                    edtNote.setText("");
+                    showAlertForLocationOff();
+                }
             }
         } else if (edt_mobile_number.getText().toString().length() == 10) {
             callSendOtp();
@@ -236,6 +278,51 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                     Utility.getResourcesString(this, R.string.app_name));
         }
 
+    }
+
+    /**
+     * This method is used to save data in the local db
+     */
+    private void saveInLocalDb() {
+        CreateSalesModel createSalesModel = new CreateSalesModel();
+        JSONArray jsonArray = new JSONArray();
+        try {
+            jsonArray.put(mCurrentLocation.getLongitude());
+            jsonArray.put(mCurrentLocation.getLatitude());
+
+            createSalesModel.setCoordinates(jsonArray.toString());
+            createSalesModel.setArea(location);
+            createSalesModel.setTime(Utility.getTime());
+            createSalesModel.setNote(edtNote.getText().toString());
+            createSalesModel.setCustomer_name(edt_customer_name.getText().toString());
+            if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString())) {
+                createSalesModel.setCustomer_mobile("");
+            } else {
+                createSalesModel.setCustomer_mobile(edt_customer_name.getText().toString());
+            }
+            createSalesModel.setDue_date(edt_delivery_date.getText().toString());
+            if (isVerified)
+                createSalesModel.setIsotpverified("true");
+            else
+                createSalesModel.setIsotpverified("false");
+
+            createSalesModel.setInitiatedDate(Utility.getDate());
+            createSalesModel.setInitiatedTime(Utility.getTime());
+
+            JSONObject jsonObject = new JSONObject();
+            if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
+                    && mLoginModel.getDynamicFieldsModels().size() > 0) {
+                for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
+                    jsonObject.put(mLoginModel.getDynamicFieldsModels().get(i).getLabel(), views.get(i).getText().toString());
+                }
+                createSalesModel.setAdditional_info(jsonObject.toString());
+            } else {
+                createSalesModel.setAdditional_info("");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        createSalesDatasource.insertData(createSalesModel);
     }
 
     private boolean isValidFields() {
@@ -260,42 +347,38 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     }
 
     private void postLocationData() {
+        final ArrayList<CreateSalesModel> createSalesModels = createSalesDatasource.selectAll();
+        JSONArray jsonSalesRecordsArray = new JSONArray();
+        if (createSalesModels != null && createSalesModels.size() > 0) {
+            for (int i = 0; i < createSalesModels.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("Coordinates", createSalesModels.get(i).getCoordinates());
+                    jsonObject.put("Area", createSalesModels.get(i).getArea());
+                    jsonObject.put("Country", "India");
+                    jsonObject.put("Time", createSalesModels.get(i).getTime());
+                    jsonObject.put("Note", createSalesModels.get(i).getNote());
+                    jsonObject.put("CustomerName", createSalesModels.get(i).getCustomer_name());
+                    jsonObject.put("CustomerMobile", createSalesModels.get(i).getCustomer_mobile());
+                    jsonObject.put("DueDate", createSalesModels.get(i).getDue_date());
+                    jsonObject.put("IsOtpVerified", createSalesModels.get(i).getIsotpverified());
+                    jsonObject.put("Source", "android");
+                    jsonObject.put("InitiatedDate", createSalesModels.get(i).getInitiatedDate());
+                    jsonObject.put("InitiatedTime", createSalesModels.get(i).getInitiatedTime());
+                    jsonObject.put("AdditionalInfo", createSalesModels.get(i).getAdditional_info());
+                    jsonSalesRecordsArray.put(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
         try {
             LinkedHashMap linkedHashMap = new LinkedHashMap();
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.put(mCurrentLocation.getLatitude());
-            jsonArray.put(mCurrentLocation.getLongitude());
-            linkedHashMap.put("Coordinates", jsonArray.toString());
-            linkedHashMap.put("Area", location);
-            linkedHashMap.put("Country", "India");
-            linkedHashMap.put("Time", Utility.getTime());
-            linkedHashMap.put("Note", edtNote.getText().toString());
-            linkedHashMap.put("CustomerName", edt_customer_name.getText().toString());
-            if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString())) {
-                linkedHashMap.put("CustomerMobile", "");
-            } else {
-                linkedHashMap.put("CustomerMobile", edt_mobile_number.getText().toString());
-            }
-            linkedHashMap.put("DueDate", edt_delivery_date.getText().toString());
-            if (isVerified)
-                linkedHashMap.put("IsOtpVerified", "true");
-            else
-                linkedHashMap.put("IsOtpVerified", "false");
-            linkedHashMap.put("Source", "android");
-            linkedHashMap.put("InitiatedDate", Utility.getDate());
-            linkedHashMap.put("InitiatedTime", Utility.getTime());
-
-            JSONObject jsonObject = new JSONObject();
-            if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
-                    && mLoginModel.getDynamicFieldsModels().size() > 0) {
-                for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
-                    jsonObject.put(mLoginModel.getDynamicFieldsModels().get(i).getLabel(), views.get(i).getText().toString());
-                }
-                linkedHashMap.put("AdditionalInfo", jsonObject.toString());
-            }
-
+            linkedHashMap.put("SalesRecords", jsonSalesRecordsArray);
             PostNoteParser mPostNoteParser = new PostNoteParser();
-            ServerJSONAsyncTask serverJSONAsyncTask = new ServerJSONAsyncTask(
+            ServerIntractorAsync serverJSONAsyncTask = new ServerIntractorAsync(
                     this, Utility.getResourcesString(this, R.string.please_wait), true,
                     APIConstants.CREATE_SALES_RECORD, linkedHashMap,
                     APIConstants.REQUEST_TYPE.POST, this, mPostNoteParser);
@@ -460,6 +543,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             if (model instanceof PostNoteModel) {
                 PostNoteModel mPostNoteModel = (PostNoteModel) model;
                 edtNote.setText("");
+                createSalesDatasource.deleteAll();
                 showAlertForLocationOff();
             } else if (model instanceof SendOtpModel) {
                 SendOtpModel mSendOtpModel = (SendOtpModel) model;

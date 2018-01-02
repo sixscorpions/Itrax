@@ -14,6 +14,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:id="@+id/rl_count"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_marginTop="@dimen/_5dp">
+
+                <TextView
+                    android:id="@+id/tv_off_line_count"
+                    android:layout_width="@dimen/_32dp"
+                    android:layout_height="@dimen/_32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_20dp"
+                    android:layout_marginStart="@dimen/_20dp"
+                    android:background="@drawable/drawable_count_button"
+                    android:gravity="center"
+                    android:text="@string/nine_ninety"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_15sp" />
+            </RelativeLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

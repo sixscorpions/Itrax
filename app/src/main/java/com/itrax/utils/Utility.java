@@ -26,11 +26,26 @@ import com.itrax.R;
 import com.itrax.activities.BaseActivity;
 import com.itrax.adapters.SpinnerDialogAdapter;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by shankar on 4/30/2017.
@@ -40,7 +55,7 @@ public class Utility {
 
     public static final int NO_INTERNET_CONNECTION = 1;
     private static final int NO_GPS_ACCESS = 2;
-
+    private static final int CONNECTION_TIMEOUT = 25000;
     /**
      * Check the value is null or empty
      *
@@ -114,9 +129,9 @@ public class Utility {
     }
 
 
-    public static android.app.AlertDialog showSettingDialog(final Context context,
+    public static AlertDialog showSettingDialog(final Context context,
                                                             String msg, String title, final int id) {
-        return new android.app.AlertDialog.Builder(context)
+        return new AlertDialog.Builder(context)
                 // .setMobile_icon_code(android.R.attr.alertDialogIcon)
                 .setMessage(msg)
                 .setTitle(title)
@@ -291,5 +306,70 @@ public class Utility {
                 });
         builderSingle.show();
     }
+
+    public static String httpJsonRequest(String url, HashMap<String, String> mParams, Context context) {
+        String websiteData = "error";
+        HttpClient client = new DefaultHttpClient();
+        HttpConnectionParams.setConnectionTimeout(client.getParams(),
+                CONNECTION_TIMEOUT); // Timeout
+        // Limit
+        HttpResponse response;
+        HttpPost post = new HttpPost(url);
+        Utility.showLog("session id ", "Session" + Utility.getSharedPrefStringData(context, Constants.LOGIN_SESSION_ID));
+        post.setHeader("Cookie", "connect.sid=" + Utility.getSharedPrefStringData(context, Constants.LOGIN_SESSION_ID));
+        StringEntity se;
+        try {
+            se = new StringEntity(getJsonParams(mParams));
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE,
+                    "application/json"));
+            post.setEntity(se);
+            response = client.execute(post);
+            //* Checking response *//*
+            if (response != null) {
+                websiteData = EntityUtils.toString(response.getEntity());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            websiteData = "error";
+            return websiteData;
+        }
+        return websiteData;
+    }
+
+    public static String getJsonParams(HashMap<String, String> paramMap) {
+        if (paramMap == null) {
+            return null;
+        }
+        JSONObject jsonObject = new JSONObject();
+        for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+            try {
+                if (entry.getKey().equalsIgnoreCase("contacts")) {
+                    JSONArray jsonArray = new JSONArray(entry
+                            .getValue());
+                    jsonObject.accumulate(entry.getKey(), jsonArray);
+                } else if (entry.getKey().equalsIgnoreCase("SalesRecords")) {
+                    /*JSONArray jsonArray = new JSONArray();
+                    jsonArray.put(entry.getValue());*/
+                    jsonObject.accumulate(entry.getKey(), entry.getValue());
+                } else if (entry.getKey().equalsIgnoreCase("login")) {
+                    JSONObject jsonArrayLogin = new JSONObject(entry
+                            .getValue());
+                    jsonObject.accumulate(entry.getKey(), jsonArrayLogin);
+                } else if (entry.getKey().equalsIgnoreCase("StudentId")
+                        ||entry.getKey().equalsIgnoreCase("RoleType")) {
+                    int i = (int) Double.parseDouble(entry.getValue());
+                    jsonObject.accumulate(entry.getKey(), i);
+                } else {
+                    jsonObject.accumulate(entry.getKey(), entry
+                            .getValue());
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Utility.showLog("jsonObject", "jsonObject" + jsonObject.toString());
+        return jsonObject.toString();
+    }
+
 
 }

@@ -2,8 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
-
+    buildToolsVersion '26.0.2'
+    flavorDimensions "default"
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.itrax"
         minSdkVersion 16

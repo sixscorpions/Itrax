@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity implements GoogleApiClient.Connec
         if (Utility.isMarshmallowOS()) {
             PackageManager pm = this.getPackageManager();
             int hasWritePerm = pm.checkPermission(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     this.getPackageName());
             if (hasWritePerm == PackageManager.PERMISSION_GRANTED) {
                 Utility.showLog("Setting Location update", "Setting Location update");

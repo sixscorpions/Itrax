@@ -5,25 +5,25 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.itrax.models.CreateSalesDataModel;
+import com.itrax.models.CreateSalesModel;
 
 import java.util.ArrayList;
 
 /**
- * Created by Shankar on 12/21/2017.
+ * Created by Shankar on 12/24/2017.
  */
 
 public class CreateSalesDataSource {
+
     private SQLiteDatabase mDatabase;
     private DatabaseHandler mHandler;
     private Context mContext;
-    private String mColumns[] = {DBConstants.KEY_CREATE_SALES_ID,
-            DBConstants.KEY_CREATE_SALES_COORDINATES, DBConstants.KEY_WEARABLE_AREA,
-            DBConstants.KEY_WEARABLE_TIME, DBConstants.KEY_WEARABLE_NOTE,
-            DBConstants.KEY_WEARABLE_CUSTOMER_NAME, DBConstants.KEY_WEARABLE_CUSTOMER_MOBILE,
-            DBConstants.KEY_WEARABLE_DUE_DATE, DBConstants.KEY_WEARABLE_IS_OTP_VERIFIED,
-            DBConstants.KEY_WEARABLE_INITIATED_DATE, DBConstants.KEY_WEARABLE_INITIATED_TIME
-    };
+    private String mColumns[] = {DBConstants.CREATE_SALES_ID, DBConstants.CREATE_SALES_COORDINATES,
+            DBConstants.CREATE_SALES_AREA, DBConstants.CREATE_SALES_TIME,
+            DBConstants.CREATE_SALES_NOTE, DBConstants.CREATE_SALES_CUSTOMER_NAME,
+            DBConstants.CREATE_SALES_CUSTOMER_MOBILE, DBConstants.CREATE_SALES_DUE_DATE,
+            DBConstants.CREATE_SALES_ISOTPVERIFIED, DBConstants.CREATE_SALES_INITIATED_DATE,
+            DBConstants.CREATE_SALES_INITIATED_TIME, DBConstants.CREATE_SALES_ADDITIONAL_INFO};
 
     public CreateSalesDataSource(Context context) {
         if (context != null) {
@@ -44,22 +44,23 @@ public class CreateSalesDataSource {
         }
     }
 
-    public long insertData(CreateSalesDataModel model) {
+    public long insertData(CreateSalesModel model) {
         long insertValue = -1;
 
         ContentValues values = new ContentValues();
-        values.put(DBConstants.KEY_CREATE_SALES_COORDINATES, model.getCoordinates());
-        values.put(DBConstants.KEY_WEARABLE_AREA, model.getArea());
-        values.put(DBConstants.KEY_WEARABLE_TIME, model.getTime());
-        values.put(DBConstants.KEY_WEARABLE_NOTE, model.getNote());
-        values.put(DBConstants.KEY_WEARABLE_CUSTOMER_NAME, model.getCustomername());
-        values.put(DBConstants.KEY_WEARABLE_CUSTOMER_MOBILE, model.getCustomermobile());
-        values.put(DBConstants.KEY_WEARABLE_DUE_DATE, model.getDuedate());
-        values.put(DBConstants.KEY_WEARABLE_IS_OTP_VERIFIED, model.getIsOtpVerified());
-        values.put(DBConstants.KEY_WEARABLE_INITIATED_DATE, model.getInitiatedDate());
-        values.put(DBConstants.KEY_WEARABLE_INITIATED_TIME, model.getInitiatedTime());
+        values.put(DBConstants.CREATE_SALES_COORDINATES, model.getCoordinates());
+        values.put(DBConstants.CREATE_SALES_AREA, model.getArea());
+        values.put(DBConstants.CREATE_SALES_TIME, model.getTime());
+        values.put(DBConstants.CREATE_SALES_NOTE, model.getNote());
+        values.put(DBConstants.CREATE_SALES_CUSTOMER_NAME, model.getCustomer_name());
+        values.put(DBConstants.CREATE_SALES_CUSTOMER_MOBILE, model.getCustomer_mobile());
+        values.put(DBConstants.CREATE_SALES_DUE_DATE, model.getDue_date());
+        values.put(DBConstants.CREATE_SALES_ISOTPVERIFIED, model.getIsotpverified());
+        values.put(DBConstants.CREATE_SALES_INITIATED_DATE, model.getInitiatedDate());
+        values.put(DBConstants.CREATE_SALES_INITIATED_TIME, model.getInitiatedTime());
+        values.put(DBConstants.CREATE_SALES_ADDITIONAL_INFO, model.getAdditional_info());
         open();
-        insertValue = mDatabase.insert(DBConstants.TABLE_CREATE_SALES_RECORD, null,
+        insertValue = mDatabase.insert(DBConstants.TABLE_CREATE_SALES_HISTORY, null,
                 values);
         close();
         return insertValue;
@@ -67,49 +68,60 @@ public class CreateSalesDataSource {
 
 
     /* Get all workouts models */
-    public ArrayList<CreateSalesDataModel> selectAll() {
-        ArrayList<CreateSalesDataModel> createSalesDataModels = null;
+    public ArrayList<CreateSalesModel> selectAll() {
+        ArrayList<CreateSalesModel> createSalesModels = null;
         open();
-        Cursor cursor = mDatabase.query(DBConstants.TABLE_CREATE_SALES_RECORD, mColumns,
+        Cursor cursor = mDatabase.query(DBConstants.TABLE_CREATE_SALES_HISTORY, mColumns,
                 null, null, null, null, null);
         if (cursor.getCount() > 0) {
-            createSalesDataModels = new ArrayList<>();
+            createSalesModels = new ArrayList<CreateSalesModel>();
             while (cursor.moveToNext()) {
-                CreateSalesDataModel model = new CreateSalesDataModel();
+                CreateSalesModel model = new CreateSalesModel();
                 model.setCoordinates(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_CREATE_SALES_COORDINATES)));
+                        .getColumnIndex(DBConstants.CREATE_SALES_COORDINATES)));
                 model.setArea(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_AREA)));
+                        .getColumnIndex(DBConstants.CREATE_SALES_AREA)));
                 model.setTime(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_TIME)));
+                        .getColumnIndex(DBConstants.CREATE_SALES_TIME)));
                 model.setNote(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_NOTE)));
-                model.setCustomername(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_CUSTOMER_NAME)));
-                model.setCustomermobile(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_CUSTOMER_MOBILE)));
-                model.setDuedate(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_DUE_DATE)));
-                model.setIsOtpVerified(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_IS_OTP_VERIFIED)));
+                        .getColumnIndex(DBConstants.CREATE_SALES_NOTE)));
+                model.setCustomer_name(cursor.getString(cursor
+                        .getColumnIndex(DBConstants.CREATE_SALES_CUSTOMER_NAME)));
+                model.setCustomer_mobile(cursor.getString(cursor
+                        .getColumnIndex(DBConstants.CREATE_SALES_CUSTOMER_MOBILE)));
+                model.setDue_date(cursor.getString(cursor
+                        .getColumnIndex(DBConstants.CREATE_SALES_DUE_DATE)));
+                model.setIsotpverified(cursor.getString(cursor
+                        .getColumnIndex(DBConstants.CREATE_SALES_ISOTPVERIFIED)));
                 model.setInitiatedDate(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_INITIATED_DATE)));
+                        .getColumnIndex(DBConstants.CREATE_SALES_INITIATED_DATE)));
                 model.setInitiatedTime(cursor.getString(cursor
-                        .getColumnIndex(DBConstants.KEY_WEARABLE_INITIATED_TIME)));
-                createSalesDataModels.add(model);
+                        .getColumnIndex(DBConstants.CREATE_SALES_INITIATED_TIME)));
+                model.setAdditional_info(cursor.getString(cursor
+                        .getColumnIndex(DBConstants.CREATE_SALES_ADDITIONAL_INFO)));
+                createSalesModels.add(model);
             }
         }
         cursor.close();
         close();
-        return createSalesDataModels;
+        return createSalesModels;
     }
 
 
-    /* Get Workouts count */
-    public int getCreateSalesDataCount() {
+    public int deleteAll() {
+        int deleteValue = -1;
+        open();
+        deleteValue = mDatabase.delete(DBConstants.TABLE_CREATE_SALES_HISTORY, null, null);
+        close();
+
+        return deleteValue;
+    }
+
+    /* Get count */
+    public int getDataCount() {
         int brandCount = -1;
         open();
-        Cursor cursor = mDatabase.query(DBConstants.TABLE_CREATE_SALES_RECORD, new String[]{DBConstants.KEY_CREATE_SALES_COORDINATES},
+        Cursor cursor = mDatabase.query(DBConstants.TABLE_CREATE_SALES_HISTORY, new String[]{DBConstants.CREATE_SALES_ID},
                 null, null, null, null, null);
         if (cursor.getCount() > 0) {
             brandCount = cursor.getCount();
@@ -117,64 +129,5 @@ public class CreateSalesDataSource {
         cursor.close();
         close();
         return brandCount;
-    }
-
-    /* Delete depends on date */
-    public int deleteWearableBySelection(String position) {
-        int deleteValue = -1;
-        open();
-        deleteValue = mDatabase.delete(DBConstants.TABLE_CREATE_SALES_RECORD, DBConstants.KEY_CREATE_SALES_COORDINATES
-                + " = ?", new String[]{position});
-        close();
-        return deleteValue;
-    }
-
-    /* Delete depends on date */
-    public int deleteWearableBySelectionByName(String address) {
-        int deleteValue = -1;
-        open();
-        deleteValue = mDatabase.delete(DBConstants.TABLE_CREATE_SALES_RECORD, DBConstants.KEY_CREATE_SALES_COORDINATES
-                + " = ?", new String[]{address});
-        close();
-        return deleteValue;
-    }
-
-    public int deleteAll() {
-        int deleteValue = -1;
-        open();
-        deleteValue = mDatabase.delete(DBConstants.TABLE_CREATE_SALES_RECORD, null, null);
-        close();
-
-        return deleteValue;
-    }
-
-    public boolean isExisting(String name) {
-        boolean isRead;
-        open();
-        Cursor cursor = mDatabase.query(DBConstants.TABLE_CREATE_SALES_RECORD, mColumns,
-                mColumns[1] + " = ?", new String[]{"" + name}, null, null, null);
-        if (cursor.getCount() > 0) {
-            isRead = true;
-        } else {
-            isRead = false;
-        }
-        cursor.close();
-        close();
-        return isRead;
-    }
-
-    public boolean isExistingAddress(String address) {
-        boolean isRead;
-        open();
-        Cursor cursor = mDatabase.query(DBConstants.TABLE_CREATE_SALES_RECORD, mColumns,
-                mColumns[2] + " = ?", new String[]{"" + address}, null, null, null);
-        if (cursor.getCount() > 0) {
-            isRead = true;
-        } else {
-            isRead = false;
-        }
-        cursor.close();
-        close();
-        return isRead;
     }
 }

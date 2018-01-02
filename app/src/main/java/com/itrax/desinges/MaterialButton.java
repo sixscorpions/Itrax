@@ -29,7 +29,7 @@ public abstract class MaterialButton extends CustomView {
 	float rippleSpeed = 20f;
 	int rippleSize = 2;
 	Integer rippleColor;
-	View.OnClickListener onClickListener;
+	OnClickListener onClickListener;
 	boolean clickAfterRipple = true;
 	int backgroundColor = Color.parseColor("#1E88E5");
 
@@ -155,7 +155,7 @@ public abstract class MaterialButton extends CustomView {
 	}
 
 	@Override
-	public void setOnClickListener(View.OnClickListener l) {
+	public void setOnClickListener(OnClickListener l) {
 		onClickListener = l;
 	}
 

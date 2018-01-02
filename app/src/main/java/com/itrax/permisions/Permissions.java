@@ -30,7 +30,7 @@ public class Permissions {
 
     /**
      * A map to keep track of our outstanding permission requests. The key is the request code sent when we call
-     * {@link ActivityCompat#requestPermissions(Activity, String[], int)}. The value is the {@link Permissions.RequestData}
+     * {@link ActivityCompat#requestPermissions(Activity, String[], int)}. The value is the {@link RequestData}
      * bundle that holds all of the request information.
      */
     private Map<Integer, RequestData> mCodesToRequests;
