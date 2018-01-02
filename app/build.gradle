@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
-    flavorDimensions "default"
+    flavorDimensions "xtrax"
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.itrax"
