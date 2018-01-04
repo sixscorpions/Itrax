@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Xtrax</string>
+    <string name="app_name">nForce</string>
 
     <!-- Dialog message -->
     <string name="alert_dialog_ok">OK</string>
@@ -59,7 +59,7 @@
     <string name="hint_mobile">Enter Mobile Number</string>
     <string name="hint_pin">Enter Pin</string>
     <string name="forgotPin">Forgot Pin</string>
-    <string name="copyrights">Copyright © Xtrax 2018.</string>
+    <string name="copyrights">Copyright © nForce 2018.</string>
     <string name="reseved">All Rights Reserved</string>
     <string name="more">More</string>
     <string name="conf_pickup">Locate</string>
