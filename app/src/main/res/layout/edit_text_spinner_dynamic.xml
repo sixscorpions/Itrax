@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/back_ground"
     android:orientation="vertical">
 
     <EditText
@@ -14,16 +14,17 @@
         android:layout_marginRight="@dimen/_15dp"
         android:layout_marginTop="@dimen/_5dp"
         android:background="@drawable/drawable_write_button"
+        android:drawableRight="@drawable/icon_down_arrow"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:drawableRight="@drawable/icon_down_arrow"
         android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
         android:hint="@string/customer_name"
         android:inputType="textCapSentences"
         android:maxLength="20"
         android:minHeight="@dimen/_40dp"
         android:padding="@dimen/_10dp"
-        android:textColorHint="@color/colorPrimary"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/hint_color"
         android:textSize="@dimen/_20sp" />
 
 </LinearLayout>

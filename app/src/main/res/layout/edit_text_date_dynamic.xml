@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/back_ground"
     android:orientation="vertical">
 
     <EditText
@@ -22,7 +22,8 @@
         android:maxLength="20"
         android:minHeight="@dimen/_40dp"
         android:padding="@dimen/_10dp"
-        android:textColorHint="@color/colorPrimary"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/hint_color"
         android:textSize="@dimen/_20sp" />
 
 </LinearLayout>

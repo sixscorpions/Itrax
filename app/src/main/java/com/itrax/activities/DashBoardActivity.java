@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -111,6 +112,8 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @BindView(R.id.rl_count)
     RelativeLayout rl_count;
 
+    private Toolbar toolbar;
+
     private AddressResultReceiver mResultReceiver;
     private String location;
     private boolean isVerified = false;
@@ -124,6 +127,10 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
         ButterKnife.bind(this);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         DatabaseHandler.getInstance(this);
         createSalesDatasource = new CreateSalesDataSource(this);
         initUI();
@@ -277,7 +284,6 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             Utility.showOKOnlyDialog(DashBoardActivity.this, "Enter 10 digits mobile number",
                     Utility.getResourcesString(this, R.string.app_name));
         }
-
     }
 
     /**

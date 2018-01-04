@@ -4,10 +4,10 @@
 
     <gradient
         android:angle="180"
-        android:endColor="@color/button"
-        android:startColor="@color/button"
+        android:endColor="@color/submit_bg_ground"
+        android:startColor="@color/submit_bg_ground"
         android:type="linear" />
 
-    <corners android:radius="@dimen/_5dp" />
+    <corners android:radius="@dimen/_25dp" />
 
 </shape>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <!-- <color name="colorPrimary">#64818e</color>
-    <color name="colorPrimaryDark">#3f5964</color>
-    <color name="colorAccent">#698592</color>-->
+    <!-- <color name="colorPrimary">#64818e</color>
+     <color name="colorPrimaryDark">#3f5964</color>
+     <color name="colorAccent">#698592</color>-->
 
-    <color name="colorPrimary">#015b3f</color>
-    <color name="colorPrimaryDark">#013323</color>
-    <color name="colorAccent">#015b3f</color>
+    <color name="colorPrimary">#223540</color>
+    <color name="colorPrimaryDark">#99bdb1</color>
+    <color name="colorAccent">#223540</color>
 
     <color name="dialogBgColor">#55000000</color>
     <color name="svThumbColor">#26111111</color>
@@ -15,6 +15,14 @@
 
     <color name="text_color">#444444</color>
     <color name="border_et_unselect">#c0c0c0</color>
- <color name="login_background">#015b3f</color>
- <color name="button">#1abc9c</color>
+    <color name="button">#1abc9c</color>
+
+    <color name="back_ground">#f0f2f5</color>
+    <color name="submit_bg_ground">#5c9f86</color>
+    <color name="hint_color">#979797</color>
+    <color name="bg_color">#223641</color>
+    <color name="font_color">#363636</color>
+    <color name="top_font">#6ec2b3</color>
+
+
 </resources>

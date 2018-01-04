@@ -50,6 +50,7 @@
     <string name="delivery_date">Next Appointment</string>
     <string name="enter_otp">Enter Otp</string>
     <string name="check_icon">&#xE5CA;</string>
+    <string name="move_vert_icon">&#xE5D4;</string>
     <string name="mobile_number">Mobile number</string>
 
     <string name="data_sent_successfully">Data sent successfully,</string>
