@@ -293,8 +293,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         CreateSalesModel createSalesModel = new CreateSalesModel();
         JSONArray jsonArray = new JSONArray();
         try {
-            jsonArray.put(mCurrentLocation.getLongitude());
+
             jsonArray.put(mCurrentLocation.getLatitude());
+            jsonArray.put(mCurrentLocation.getLongitude());
 
             createSalesModel.setCoordinates(jsonArray.toString());
             createSalesModel.setArea(location);
