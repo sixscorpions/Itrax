@@ -16,7 +16,7 @@
         android:paddingLeft="@dimen/_10dp"
         android:paddingRight="@dimen/_10dp"
         android:text="@string/app_name"
-        android:textColor="@color/btnDefaultColor"
+        android:textColor="@color/submit_bg_ground"
         android:textSize="@dimen/_18sp" />
 
 </RelativeLayout>

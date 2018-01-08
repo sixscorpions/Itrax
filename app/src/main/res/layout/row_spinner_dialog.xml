@@ -9,7 +9,7 @@
         style="@style/textview"
         android:gravity="center"
         android:minHeight="@dimen/_45dp"
-        android:textColor="@color/text_color"
+        android:textColor="@color/submit_bg_ground"
         android:textSize="@dimen/_16sp" />
 
     <View
