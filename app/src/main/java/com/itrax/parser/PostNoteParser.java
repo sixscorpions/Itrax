@@ -17,12 +17,17 @@ public class PostNoteParser implements Parser<Model> {
         PostNoteModel mPostNoteModel = new PostNoteModel();
         try {
             JSONObject jsonObject = new JSONObject(s);
-            if (jsonObject.has("ok"))
-                mPostNoteModel.setOk(jsonObject.optInt("ok"));
-            if (jsonObject.has("nModified"))
-                mPostNoteModel.setNModified(jsonObject.optInt("nModified"));
-            if (jsonObject.has("n"))
-                mPostNoteModel.setN(jsonObject.optInt("n"));
+            if (jsonObject.has("err")) {
+                mPostNoteModel.setStatus(false);
+                mPostNoteModel.setMessage(jsonObject.optString("message"));
+            } else {
+                if (jsonObject.has("ok"))
+                    mPostNoteModel.setOk(jsonObject.optInt("ok"));
+                if (jsonObject.has("nModified"))
+                    mPostNoteModel.setNModified(jsonObject.optInt("nModified"));
+                if (jsonObject.has("n"))
+                    mPostNoteModel.setN(jsonObject.optInt("n"));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

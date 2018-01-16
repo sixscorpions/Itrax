@@ -67,6 +67,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.internal.Utils;
 
 /**
  * Created by Shankar on 5/2/2017.
@@ -549,9 +550,13 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         if (model != null) {
             if (model instanceof PostNoteModel) {
                 PostNoteModel mPostNoteModel = (PostNoteModel) model;
-                edtNote.setText("");
-                createSalesDatasource.deleteAll();
-                showAlertForLocationOff();
+                if (mPostNoteModel.isStatus()) {
+                    edtNote.setText("");
+                    createSalesDatasource.deleteAll();
+                    showAlertForLocationOff();
+                } else {
+                    Utility.showToastMessage(DashBoardActivity.this, mPostNoteModel.getMessage());
+                }
             } else if (model instanceof SendOtpModel) {
                 SendOtpModel mSendOtpModel = (SendOtpModel) model;
                 if (mSendOtpModel != null && mSendOtpModel.isSuccess())
@@ -585,6 +590,14 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         mDialog.setCanceledOnTouchOutside(false);
         mDialog.setCancelable(true);
+
+        TextView tv_heading = (TextView) mDialog.findViewById(R.id.tv_heading);
+        if (Utility.isNetworkAvailable(DashBoardActivity.this)) {
+            tv_heading.setText(Utility.getResourcesString(DashBoardActivity.this, R.string.data_sent_successfully));
+        } else {
+            tv_heading.setText(Utility.getResourcesString(DashBoardActivity.this, R.string.data_stored_successfully));
+        }
+
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDialog.dismiss();

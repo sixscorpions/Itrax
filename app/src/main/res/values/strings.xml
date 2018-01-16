@@ -55,6 +55,7 @@
 
     <string name="data_sent_successfully">Data sent successfully,</string>
     <string name="switch_off_your_location_to_save_battery">Switch off your location to save battery</string>
+    <string name="data_stored_successfully">Data Stored in local DB,</string>
 
     <string name="loginLogo">Logo</string>
     <string name="hint_mobile">Enter Mobile Number</string>
