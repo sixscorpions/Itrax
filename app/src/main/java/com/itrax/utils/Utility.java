@@ -2,11 +2,13 @@ package com.itrax.utils;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -24,6 +26,8 @@ import android.widget.Toast;
 
 import com.itrax.R;
 import com.itrax.activities.BaseActivity;
+import com.itrax.activities.DashBoardActivity;
+import com.itrax.activities.LoginActivity;
 import com.itrax.adapters.SpinnerDialogAdapter;
 
 import org.apache.http.HttpResponse;
@@ -56,6 +60,7 @@ public class Utility {
     public static final int NO_INTERNET_CONNECTION = 1;
     private static final int NO_GPS_ACCESS = 2;
     private static final int CONNECTION_TIMEOUT = 25000;
+
     /**
      * Check the value is null or empty
      *
@@ -130,7 +135,7 @@ public class Utility {
 
 
     public static AlertDialog showSettingDialog(final Context context,
-                                                            String msg, String title, final int id) {
+                                                String msg, String title, final int id) {
         return new AlertDialog.Builder(context)
                 // .setMobile_icon_code(android.R.attr.alertDialogIcon)
                 .setMessage(msg)
@@ -224,26 +229,6 @@ public class Utility {
         }
     }
 
-    public static void showOKOnlyDialog(Context context, String msg,
-                                        String title) {
-        SpannableString s = new SpannableString(msg);
-        Linkify.addLinks(s, Linkify.ALL);
-
-        AlertDialog d = new AlertDialog.Builder(context)
-                .setMessage(s)
-                .setTitle(title)
-                .setPositiveButton(R.string.alert_dialog_ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int whichButton) {
-                            }
-                        }).show();
-
-        ((TextView) d.findViewById(android.R.id.message))
-                .setMovementMethod(LinkMovementMethod.getInstance());
-    }
-
     /**
      * GET SHARED PREFERENCES STRING DATA
      */
@@ -324,8 +309,10 @@ public class Utility {
                     "application/json"));
             post.setEntity(se);
             response = client.execute(post);
-            //* Checking response *//*
-            if (response != null) {
+
+            if (response != null && response.getStatusLine().getStatusCode() == 401 || response.getStatusLine().getStatusCode() == 502) {
+                websiteData = null;
+            } else if (response != null) {
                 websiteData = EntityUtils.toString(response.getEntity());
             }
         } catch (Exception e) {
@@ -356,7 +343,7 @@ public class Utility {
                             .getValue());
                     jsonObject.accumulate(entry.getKey(), jsonArrayLogin);
                 } else if (entry.getKey().equalsIgnoreCase("StudentId")
-                        ||entry.getKey().equalsIgnoreCase("RoleType")) {
+                        || entry.getKey().equalsIgnoreCase("RoleType")) {
                     int i = (int) Double.parseDouble(entry.getValue());
                     jsonObject.accumulate(entry.getKey(), i);
                 } else {
@@ -369,6 +356,56 @@ public class Utility {
         }
         Utility.showLog("jsonObject", "jsonObject" + jsonObject.toString());
         return jsonObject.toString();
+    }
+
+    public static void showOKOnlyDialog(final DashBoardActivity context, String msg,
+                                        String title) {
+
+        final Dialog mDialog = new Dialog(context);
+        mDialog.requestWindowFeature(1);
+        mDialog.setContentView(R.layout.session_dialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+
+        TextView tv_heading = (TextView) mDialog.findViewById(R.id.tv_heading);
+        tv_heading.setText(msg);
+        ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Utility.showLog("Clicked", "Clicked");
+                Utility.setSharedPrefStringData(context, Constants.LOGIN_SESSION_ID, "");
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+                context.finish();
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
+    }
+
+    public static void showOKOnlyDialog(final LoginActivity context, String msg,
+                                        String title) {
+
+        final Dialog mDialog = new Dialog(context);
+        mDialog.requestWindowFeature(1);
+        mDialog.setContentView(R.layout.session_dialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+
+        TextView tv_heading = (TextView) mDialog.findViewById(R.id.tv_heading);
+        tv_heading.setText(msg);
+        ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Utility.showLog("Clicked", "Clicked");
+                Utility.setSharedPrefStringData(context, Constants.LOGIN_SESSION_ID, "");
+                Intent intent = new Intent(context, LoginActivity.class);
+                context.startActivity(intent);
+                context.finish();
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
     }
 
 

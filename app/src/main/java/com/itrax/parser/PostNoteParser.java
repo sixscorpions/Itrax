@@ -32,6 +32,8 @@ public class PostNoteParser implements Parser<Model> {
 
         } catch (Exception e) {
             e.printStackTrace();
+            mPostNoteModel.setStatus(false);
+            mPostNoteModel.setMessage("");
         }
 
         return mPostNoteModel;

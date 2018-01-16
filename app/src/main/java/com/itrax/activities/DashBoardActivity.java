@@ -36,7 +36,6 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.itrax.R;
 import com.itrax.aynctask.IAsyncCaller;
-import com.itrax.aynctask.ServerJSONAsyncTask;
 import com.itrax.aynctaskold.ServerIntractorAsync;
 import com.itrax.db.CreateSalesDataSource;
 import com.itrax.db.DatabaseHandler;
@@ -67,7 +66,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.internal.Utils;
 
 /**
  * Created by Shankar on 5/2/2017.
@@ -556,6 +554,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                     showAlertForLocationOff();
                 } else {
                     Utility.showToastMessage(DashBoardActivity.this, mPostNoteModel.getMessage());
+                    showAlertForLocationOffCustom();
                 }
             } else if (model instanceof SendOtpModel) {
                 SendOtpModel mSendOtpModel = (SendOtpModel) model;
@@ -597,6 +596,32 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         } else {
             tv_heading.setText(Utility.getResourcesString(DashBoardActivity.this, R.string.data_stored_successfully));
         }
+
+        ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mDialog.dismiss();
+                Intent intent = new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                DashBoardActivity.this.startActivity(intent);
+                DashBoardActivity.this.finish();
+                System.exit(0);
+            }
+        });
+        mDialog.show();
+    }
+
+    private void showAlertForLocationOffCustom() {
+
+        final Dialog mDialog = new Dialog(this);
+        mDialog.requestWindowFeature(1);
+        mDialog.setContentView(R.layout.data_save_dialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+
+        TextView tv_heading = (TextView) mDialog.findViewById(R.id.tv_heading);
+        tv_heading.setText(Utility.getResourcesString(DashBoardActivity.this, R.string.data_stored_successfully));
+
 
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -716,7 +741,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             LinkedHashMap linkedHashMap = new LinkedHashMap();
             linkedHashMap.put("MobileNumber", edt_mobile_number.getText().toString());
             SendOtpParser mSendOtpParser = new SendOtpParser();
-            ServerJSONAsyncTask serverJSONAsyncTask = new ServerJSONAsyncTask(
+            ServerIntractorAsync serverJSONAsyncTask = new ServerIntractorAsync(
                     this, Utility.getResourcesString(this, R.string.please_wait), true,
                     APIConstants.GET_SALES_OTP, linkedHashMap,
                     APIConstants.REQUEST_TYPE.POST, this, mSendOtpParser);

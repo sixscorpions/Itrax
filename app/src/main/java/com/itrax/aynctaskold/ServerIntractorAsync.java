@@ -7,6 +7,7 @@ import android.os.Build;
 
 
 import com.itrax.R;
+import com.itrax.activities.DashBoardActivity;
 import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.models.Model;
 import com.itrax.parser.Parser;
@@ -22,7 +23,7 @@ public class ServerIntractorAsync extends BaseAsynkTask {
     private String mResponse = null;
     private Model model;
 
-    public ServerIntractorAsync(Context context, String dialogMessage,
+    public ServerIntractorAsync(DashBoardActivity context, String dialogMessage,
                                 boolean showDialog, String url, LinkedHashMap<String, String> mParamMap,
                                 APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser) {
         super(context, dialogMessage, showDialog, url, mParamMap, requestType,
@@ -76,6 +77,9 @@ public class ServerIntractorAsync extends BaseAsynkTask {
                         Utility.NO_INTERNET_CONNECTION).show();
                 model = null;
                 caller.onComplete(model);
+            } else if (result == -1) {
+                Utility.showOKOnlyDialog(mContext, Utility.getResourcesString(mContext, R.string.relogin),
+                        Utility.getResourcesString(mContext, R.string.app_name));
             } else {
                 model = null;
                 caller.onComplete(model);

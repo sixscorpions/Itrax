@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 
+import com.itrax.activities.LoginActivity;
 import com.itrax.customviews.CustomProgressDialog;
 import com.itrax.parser.Parser;
 import com.itrax.utils.APIConstants;
@@ -20,7 +21,7 @@ import java.util.LinkedHashMap;
 public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Integer> {
     protected AnimationDrawable Anim;
     protected CustomProgressDialog mCustomProgressDialog = null;
-    protected Context mContext;
+    protected LoginActivity mContext;
     protected String mDialogMessage, mApiMessage;
     protected boolean mShowDialog;
 
@@ -46,7 +47,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Integer> {
      * @param caller        , Caller activity which will recieve response
      * @param parser        , JSON parser for the response
      */
-    public BaseAsyncTask(Context context, String dialogMessage,
+    public BaseAsyncTask(LoginActivity context, String dialogMessage,
                          boolean showDialog, String url, LinkedHashMap<String, String> mParams,
                          APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser) {
 
@@ -61,7 +62,7 @@ public abstract class BaseAsyncTask extends AsyncTask<Void, Void, Integer> {
         mCustomProgressDialog = new CustomProgressDialog(mContext);
     }
 
-    public BaseAsyncTask(Context context, String dialogMessage,
+    public BaseAsyncTask(LoginActivity context, String dialogMessage,
                          boolean showDialog, String url, LinkedHashMap<String, String> mParams,
                          APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser, String tag, File file, ArrayList<File> mFiles) {
 

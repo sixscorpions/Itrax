@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15dp"
+        android:paddingEnd="@dimen/_15dp"
+        android:paddingStart="@dimen/_15dp"
+        android:text="@string/app_name"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10dp"
+        android:paddingEnd="@dimen/_15dp"
+        android:paddingStart="@dimen/_15dp"
+        android:text="@string/data_sent_successfully"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_18sp" />
+
+    <TextView
+        android:id="@+id/tv_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_25dp"
+        android:gravity="end"
+        android:paddingBottom="@dimen/_15dp"
+        android:paddingEnd="@dimen/_15dp"
+        android:paddingStart="@dimen/_15dp"
+        android:text="@string/alert_dialog_ok"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_18sp" />
+
+</LinearLayout>

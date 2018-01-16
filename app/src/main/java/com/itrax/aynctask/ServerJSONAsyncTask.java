@@ -5,6 +5,7 @@ import android.support.compat.BuildConfig;
 
 
 import com.itrax.R;
+import com.itrax.activities.LoginActivity;
 import com.itrax.models.Model;
 import com.itrax.parser.Parser;
 import com.itrax.utils.APIConstants;
@@ -43,7 +44,7 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
     static final String COOKIES_HEADER = "Set-Cookie";
     private java.net.CookieManager msCookieManager = new java.net.CookieManager();
 
-    public ServerJSONAsyncTask(Context context, String dialogMessage,
+    public ServerJSONAsyncTask(LoginActivity context, String dialogMessage,
                                boolean showDialog, String url, LinkedHashMap<String, String> mParams,
                                APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser) {
         super(context, dialogMessage, showDialog, url, mParams, requestType,
@@ -51,7 +52,7 @@ public class ServerJSONAsyncTask extends BaseAsyncTask {
 
     }
 
-    public ServerJSONAsyncTask(Context context, String dialogMessage,
+    public ServerJSONAsyncTask(LoginActivity context, String dialogMessage,
                                boolean showDialog, String url, LinkedHashMap<String, String> mParams,
                                APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser, String tag, File file, ArrayList<File> mFiles) {
         super(context, dialogMessage, showDialog, url, mParams, requestType,
