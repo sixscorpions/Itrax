@@ -21,6 +21,7 @@ public class PostNoteParser implements Parser<Model> {
                 mPostNoteModel.setStatus(false);
                 mPostNoteModel.setMessage(jsonObject.optString("message"));
             } else {
+                mPostNoteModel.setStatus(true);
                 if (jsonObject.has("ok"))
                     mPostNoteModel.setOk(jsonObject.optInt("ok"));
                 if (jsonObject.has("nModified"))
