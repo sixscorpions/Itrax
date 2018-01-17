@@ -263,6 +263,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                 } else {
                     saveInLocalDb();
                     edtNote.setText("");
+                    edt_customer_name.setText("");
+                    edt_mobile_number.setText("");
+                    edt_delivery_date.setText("");
                     showAlertForLocationOff();
                 }
             }
@@ -550,6 +553,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                 PostNoteModel mPostNoteModel = (PostNoteModel) model;
                 if (mPostNoteModel.isStatus()) {
                     edtNote.setText("");
+                    edt_customer_name.setText("");
+                    edt_mobile_number.setText("");
+                    edt_delivery_date.setText("");
                     createSalesDatasource.deleteAll();
                     showAlertForLocationOff();
                 } else {
