@@ -307,7 +307,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString())) {
                 createSalesModel.setCustomer_mobile("");
             } else {
-                createSalesModel.setCustomer_mobile(edt_customer_name.getText().toString());
+                createSalesModel.setCustomer_mobile(edt_mobile_number.getText().toString());
             }
             createSalesModel.setDue_date(edt_delivery_date.getText().toString());
             if (isVerified)
