@@ -70,5 +70,6 @@
     <string name="action_recent_trip">Recent Trips</string>
 
     <string name="nine_ninety">0</string>
+    <string name="count">Count</string>
 
 </resources>

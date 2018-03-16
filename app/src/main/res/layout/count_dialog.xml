@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/back_ground"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edt_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_15dp"
+        android:background="@drawable/drawable_write_button"
+        android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
+        android:hint="@string/count"
+        android:inputType="number"
+        android:maxLength="5"
+        android:minHeight="@dimen/_40dp"
+        android:padding="@dimen/_10dp"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/hint_color"
+        android:textSize="@dimen/_20sp" />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="@dimen/_200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/_5dp"
+        android:layout_marginLeft="@dimen/_15dp"
+        android:layout_marginRight="@dimen/_15dp"
+        android:layout_marginTop="@dimen/_5dp"
+        android:background="@drawable/login_button_new"
+        android:minHeight="@dimen/_50dp"
+        android:text="@string/send"
+        android:textAllCaps="false"
+        android:textColor="@color/submit_bg_ground"
+        android:textSize="@dimen/_20sp" />
+
+
+</LinearLayout>

@@ -14,12 +14,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +29,7 @@ import com.itrax.activities.BaseActivity;
 import com.itrax.activities.DashBoardActivity;
 import com.itrax.activities.LoginActivity;
 import com.itrax.adapters.SpinnerDialogAdapter;
+import com.itrax.adapters.SpinnerDialogAdapterForMedicines;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -45,10 +46,8 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -292,6 +291,61 @@ public class Utility {
         builderSingle.show();
     }
 
+
+    public static void showSpinnerDialogForMedicines(final BaseActivity parent, String title,
+                                                     List<String> mList, final EditText et) {
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(parent);
+
+        /*CUSTOM TITLE*/
+        LayoutInflater inflater = (LayoutInflater) parent.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_include_dialog_header, null);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_alert_dialog_title);
+        builderSingle.setCustomTitle(view);
+        tv_title.setText(title);
+
+        final SpinnerDialogAdapterForMedicines adapter = new SpinnerDialogAdapterForMedicines(parent,
+                100, mList);
+        builderSingle.setAdapter(adapter,
+                new DialogInterface.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String mData = adapter.getItem(which);
+                        et.setText("" + mData);
+                        showAskCountDialog(which, parent);
+                    }
+                });
+        builderSingle.show();
+    }
+
+    private static void showAskCountDialog(final int which, final BaseActivity parent) {
+        final Dialog dialog = new Dialog(parent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.setCancelable(false);
+        dialog.setContentView(R.layout.count_dialog);
+
+        final EditText edt_count = (EditText) dialog.findViewById(R.id.edt_count);
+        final Button btn_send = (Button) dialog.findViewById(R.id.btn_send);
+        InputMethodManager imm = (InputMethodManager) parent.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        btn_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Utility.isValueNullOrEmpty(edt_count.getText().toString())) {
+                    DashBoardActivity.count.set(which, Integer.parseInt(edt_count.getText().toString()));
+                    dialog.dismiss();
+                } else {
+                    Utility.showToastMessage(parent, "Enter count");
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+
     public static String httpJsonRequest(String url, HashMap<String, String> mParams, Context context) {
         String websiteData = "error";
         HttpClient client = new DefaultHttpClient();
@@ -356,6 +410,27 @@ public class Utility {
         }
         Utility.showLog("jsonObject", "jsonObject" + jsonObject.toString());
         return jsonObject.toString();
+    }
+
+    public static void showOKOnlyDialogNormal(final DashBoardActivity context, String msg,
+                                              String title) {
+
+        final Dialog mDialog = new Dialog(context);
+        mDialog.requestWindowFeature(1);
+        mDialog.setContentView(R.layout.session_dialog);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+
+        TextView tv_heading = (TextView) mDialog.findViewById(R.id.tv_heading);
+        tv_heading.setText(msg);
+        ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Utility.showLog("Clicked", "Clicked");
+                mDialog.dismiss();
+            }
+        });
+        mDialog.show();
     }
 
     public static void showOKOnlyDialog(final DashBoardActivity context, String msg,

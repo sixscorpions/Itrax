@@ -137,7 +137,7 @@
                     android:background="@android:color/transparent"
                     android:gravity="top|bottom|center_vertical|fill_vertical|center|fill"
                     android:text="@string/check_icon"
-                    android:textColorHint="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_20sp" />
             </LinearLayout>
 

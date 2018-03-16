@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +12,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -111,6 +113,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @BindView(R.id.rl_count)
     RelativeLayout rl_count;
 
+    public static List<Integer> count = new ArrayList<>();
     private Toolbar toolbar;
 
     private AddressResultReceiver mResultReceiver;
@@ -121,12 +124,14 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     private ArrayList<EditText> views = new ArrayList<>();
     private CreateSalesDataSource createSalesDatasource;
 
+    private boolean isMedicines = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_new);
         ButterKnife.bind(this);
-
+        isMedicines = false;
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -201,6 +206,29 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                     });
                     views.add(editTextDate);
                     ll_dynamic_data.addView(linearLayout2);
+                } else if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Dropdown")
+                        && mLoginModel.getDynamicFieldsModels().get(i).getLabel().equalsIgnoreCase("medicines")) {
+                    isMedicines = true;
+                    LinearLayout linearLayout3 = (LinearLayout) getLayoutInflater().inflate(R.layout.edit_text_spinner_dynamic, null);
+                    final EditText editTextSpinner = (EditText) linearLayout3.findViewById(R.id.edt_spinner);
+                    editTextSpinner.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    final String mName = mLoginModel.getDynamicFieldsModels().get(i).getLabel();
+
+                    String mListNames = mLoginModel.getDynamicFieldsModels().get(i).getList();
+                    String[] array_list = mListNames.split(", ");
+                    final List<String> stringList = new ArrayList<>();
+                    for (int k = 0; k < array_list.length; k++) {
+                        stringList.add(array_list[k]);
+                        count.add(0);
+                    }
+                    editTextSpinner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utility.showSpinnerDialogForMedicines(DashBoardActivity.this, mName, stringList, editTextSpinner);
+                        }
+                    });
+                    views.add(editTextSpinner);
+                    ll_dynamic_data.addView(linearLayout3);
                 } else if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Dropdown")) {
                     LinearLayout linearLayout3 = (LinearLayout) getLayoutInflater().inflate(R.layout.edit_text_spinner_dynamic, null);
                     final EditText editTextSpinner = (EditText) linearLayout3.findViewById(R.id.edt_spinner);
@@ -256,7 +284,7 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     @OnClick(R.id.btn_send)
     void onBtnLoginClick() {
         if (isVerified) {
-            if (isValidFields()) {
+            if (isValidFieldsForDataSubmit()) {
                 if (Utility.isNetworkAvailable(DashBoardActivity.this)) {
                     saveInLocalDb();
                     postLocationData();
@@ -281,9 +309,23 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                 }
             }
         } else if (edt_mobile_number.getText().toString().length() == 10) {
-            callSendOtp();
+            if (mLoginModel.isOTPRequired() && isMedicines) {
+                boolean mIsCount = false;
+                for (int i = 0; i < count.size(); i++) {
+                    if (count.get(i) > 0) {
+                        mIsCount = true;
+                    }
+                }
+                if (mIsCount) {
+                    callSendOtp();
+                } else {
+                    showDialogForMedicines();
+                }
+            } else {
+                callSendOtp();
+            }
         } else {
-            Utility.showOKOnlyDialog(DashBoardActivity.this, "Enter 10 digits mobile number",
+            Utility.showOKOnlyDialogNormal(DashBoardActivity.this, "Enter 10 digits mobile number",
                     Utility.getResourcesString(this, R.string.app_name));
         }
     }
@@ -338,10 +380,10 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         if (Utility.isValueNullOrEmpty(this.edt_customer_name.getText().toString())) {
             Utility.setSnackBar(this.edt_customer_name, "Please enter customer name");
             return false;
-        } /*else if (!isVerified) {
+        } else if (mLoginModel.isOTPRequired()) {
             Utility.setSnackBar(this.edtNote, "Please verify your number");
             return false;
-        }  else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
+        } /* else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
             Utility.setSnackBar(edt_delivery_date, "Please select measurement date");
             return false;
         }  else if (Utility.isValueNullOrEmpty(this.edtNote.getText().toString())) {
@@ -354,6 +396,25 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             return false;
         }
     }
+
+    private boolean isValidFieldsForDataSubmit() {
+        if (Utility.isValueNullOrEmpty(this.edt_customer_name.getText().toString())) {
+            Utility.setSnackBar(this.edt_customer_name, "Please enter customer name");
+            return false;
+        } /* else if (Utility.isValueNullOrEmpty(edt_delivery_date.getText().toString())) {
+            Utility.setSnackBar(edt_delivery_date, "Please select measurement date");
+            return false;
+        }  else if (Utility.isValueNullOrEmpty(this.edtNote.getText().toString())) {
+            Utility.setSnackBar(this.edtNote, "Please enter note");
+            return false;
+        } */ else if (this.mCurrentLocation != null) {
+            return true;
+        } else {
+            Utility.setSnackBar(this.edtNote, "Something problem with location getting. Try after some time");
+            return false;
+        }
+    }
+
 
     private void postLocationData() {
         final ArrayList<CreateSalesModel> createSalesModels = createSalesDatasource.selectAll();
@@ -687,6 +748,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString().trim())) {
             Utility.setSnackBar(edt_mobile_number, "Please enter mobile number");
             edt_mobile_number.requestFocus();
+        } else if (edt_mobile_number.getText().toString().trim().length() < 10) {
+            Utility.setSnackBar(edt_mobile_number, "Please enter valid mobile number");
+            edt_mobile_number.requestFocus();
         } else {
             isValidated = true;
         }
@@ -737,8 +801,47 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     void onEdtCheck() {
         if (isMobileNumberEntered()) {
             //showOtpDialog();
-            callSendOtp();
+            if (mLoginModel.isOTPRequired() && isMedicines) {
+                boolean mIsCount = false;
+                for (int i = 0; i < count.size(); i++) {
+                    if (count.get(i) > 0) {
+                        mIsCount = true;
+                    }
+                }
+                if (mIsCount) {
+                    callSendOtp();
+                } else {
+                    showDialogForMedicines();
+                }
+            } else {
+                callSendOtp();
+            }
         }
+    }
+
+    /**
+     * This method is used to show the medicines
+     */
+    private void showDialogForMedicines() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Would you like to offer any medicines");
+        alertDialogBuilder.setPositiveButton("yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                callSendOtp();
+            }
+        });
+
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     /*This call is used to send the OTP*/
