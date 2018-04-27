@@ -146,8 +146,15 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
             if (model instanceof LoginModel) {
                 LoginModel loginModel = (LoginModel) model;
                 Utility.setSharedPrefStringData(LoginActivity.this, Constants.LOGIN_ID, "" + loginModel.getId());
+
+                Utility.setSharedPrefStringData(LoginActivity.this, Constants.LOGIN_SESSION_ID, "" + loginModel.getToken());
+
                 Intent intent = new Intent(LoginActivity.this, DashBoardActivity.class);
                 startActivity(intent);
+
+                Utility.setSharedPrefStringData(LoginActivity.this, Constants.USER_NAME, "");
+                Utility.setSharedPrefStringData(LoginActivity.this, Constants.CONTACT_NUMBER, edtUsername.getText().toString());
+
                 finish();
             }
         }

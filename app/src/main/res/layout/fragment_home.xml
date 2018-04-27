@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/_15dp"
+    android:layout_marginEnd="@dimen/_15dp"
+    android:layout_marginStart="@dimen/_15dp"
+    android:background="@drawable/workbeanch_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10dp"
+        android:layout_marginStart="@dimen/_10dp"
+        android:layout_marginTop="@dimen/_15dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tv_doctors_visit"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/rectangel_edit_left"
+            android:gravity="center"
+            android:text="@string/doctors_visit"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_16sp" />
+
+        <View
+            android:layout_width="@dimen/_1dp"
+            android:layout_height="@dimen/_40dp"
+            android:background="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/tv_inventory"
+            android:layout_width="@dimen/_0dp"
+            android:layout_height="@dimen/_40dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/rectangel_edit_fill_right"
+            android:gravity="center"
+            android:text="@string/inventory"
+            android:textAllCaps="true"
+            android:textColor="@color/start_color"
+            android:textSize="@dimen/_16sp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_submit"
+        android:layout_below="@+id/ll_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_25dp"
+                    android:layout_height="@dimen/_25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/doctor_icon" />
+
+                <EditText
+                    android:id="@+id/edt_doctor_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:hint="@string/doctor_name"
+                    android:inputType="text"
+                    android:paddingLeft="@dimen/_10dp"
+                    android:paddingStart="@dimen/_10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/text_hint_color" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_boarder" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_25dp"
+                    android:layout_height="@dimen/_25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/mobile_icon" />
+
+                <EditText
+                    android:id="@+id/edt_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:hint="@string/mobile_number"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:paddingLeft="@dimen/_10dp"
+                    android:paddingStart="@dimen/_10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/text_hint_color" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_boarder" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_25dp"
+                    android:layout_height="@dimen/_25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/date_icon" />
+
+                <EditText
+                    android:id="@+id/edt_delivery_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:focusable="false"
+                    android:hint="@string/delivery_date"
+                    android:paddingLeft="@dimen/_10dp"
+                    android:paddingStart="@dimen/_10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/text_hint_color" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_boarder" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_25dp"
+                    android:layout_height="@dimen/_25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/madicines_icon" />
+
+                <EditText
+                    android:id="@+id/edt_medicines"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:focusable="false"
+                    android:hint="@string/medicines"
+                    android:paddingLeft="@dimen/_10dp"
+                    android:paddingStart="@dimen/_10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/text_hint_color" />
+
+                <ImageView
+                    android:layout_width="@dimen/_20dp"
+                    android:layout_height="@dimen/_20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/arrow_down" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_boarder" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:layout_marginEnd="@dimen/_5dp"
+                android:layout_marginStart="@dimen/_5dp"
+                android:layout_marginTop="@dimen/_10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_25dp"
+                    android:layout_height="@dimen/_25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/email_icon" />
+
+                <EditText
+                    android:id="@+id/edt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="@dimen/_10dp"
+                    android:paddingStart="@dimen/_10dp"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/text_hint_color" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/shape_boarder" />
+
+            <EditText
+                android:id="@+id/et_invite_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ll_party_invite"
+                android:layout_marginBottom="@dimen/_15dp"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:layout_marginStart="@dimen/_10dp"
+                android:layout_marginTop="@dimen/_15dp"
+                android:background="@drawable/dotted_rectangle_boarder"
+                android:gravity="start|top"
+                android:hint="@string/write_here"
+                android:minHeight="@dimen/_70dp"
+                android:padding="@dimen/_10dp"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_hint_color"
+                android:textSize="@dimen/_15sp"
+                android:visibility="visible" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/_15dp"
+        android:layout_marginEnd="@dimen/_30dp"
+        android:layout_marginStart="@dimen/_30dp"
+        android:background="@drawable/search_round_corners"
+        android:gravity="center"
+        android:text="@string/submit"
+        android:textAllCaps="true"
+        android:textColor="@color/start_color"
+        android:textSize="@dimen/_15sp" />
+
+</LinearLayout>

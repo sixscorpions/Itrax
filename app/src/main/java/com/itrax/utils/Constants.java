@@ -31,4 +31,12 @@ public class Constants {
 
     public static final String LOGIN_RESPONSE = "LOGIN_RESPONSE";
 
+    public static final String CONTACT_NUMBER = "CONTACT_NUMBER";
+    public static final String USER_NAME = "USER_NAME";
+    public static int SPLASH_TIME_OUT = 3000;
+
+
+    public static final String SELECTED_LIST = "SELECTED_LIST";
+    public static final String SELECTED_COUNT = "SELECTED_COUNT";
+
 }

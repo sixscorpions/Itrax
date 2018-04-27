@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/login_screen">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +16,10 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:layout_margin="30dp"
+            android:background="@drawable/circle_shape"
             android:contentDescription="@string/loginLogo"
-            android:src="@drawable/login_itrax" />
+            android:padding="@dimen/_10sp"
+            android:src="@drawable/logo_copy" />
 
         <RelativeLayout
             android:id="@+id/login_layout"
@@ -42,9 +44,12 @@
                     android:id="@+id/edt_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/white"
                     android:hint="@string/hint_mobile"
                     android:inputType="number"
-                    android:textColor="@android:color/white" />
+                    android:text="1212121212"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/edit_hint_color" />
             </RelativeLayout>
 
             <LinearLayout
@@ -63,9 +68,12 @@
                     android:id="@+id/edt_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/white"
                     android:hint="@string/hint_pin"
                     android:inputType="textPassword"
-                    android:textColor="@android:color/white" />
+                    android:text="1234"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/edit_hint_color" />
             </LinearLayout>
 
 
@@ -76,12 +84,10 @@
                 android:layout_below="@+id/pin_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="20dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/ellipse_shape"
                 android:contentDescription="@string/login"
                 android:onClick="login"
-                android:src="@drawable/ic_login" />
-
-
+                android:src="@drawable/arrow_forward" />
         </RelativeLayout>
 
 
@@ -97,6 +103,7 @@
                 android:id="@+id/copyright1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:text="@string/copyrights"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white" />
@@ -106,6 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/copyright1"
+                android:layout_centerHorizontal="true"
                 android:text="@string/reseved"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@android:color/white" />

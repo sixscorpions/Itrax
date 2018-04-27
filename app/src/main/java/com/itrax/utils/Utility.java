@@ -13,7 +13,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +27,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +35,10 @@ import com.itrax.R;
 import com.itrax.activities.BaseActivity;
 import com.itrax.activities.DashBoardActivity;
 import com.itrax.activities.LoginActivity;
+import com.itrax.activities.SummaryActivity;
 import com.itrax.adapters.SpinnerDialogAdapter;
 import com.itrax.adapters.SpinnerDialogAdapterForMedicines;
+import com.itrax.fragments.HomeFragment;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -314,28 +323,49 @@ public class Utility {
                     public void onClick(DialogInterface dialog, int which) {
                         String mData = adapter.getItem(which);
                         et.setText("" + mData);
-                        showAskCountDialog(which, parent);
+                        //showAskCountDialog(which, parent);
                     }
                 });
         builderSingle.show();
     }
 
-    private static void showAskCountDialog(final int which, final BaseActivity parent) {
+    public static void showAskCountDialog(final int which, final BaseActivity parent, String mName, final String tag) {
         final Dialog dialog = new Dialog(parent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //dialog.setCancelable(false);
         dialog.setContentView(R.layout.count_dialog);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        final TextView tv_medicine_name = (TextView) dialog.findViewById(R.id.tv_medicine_name);
+        tv_medicine_name.setText("" + mName);
 
         final EditText edt_count = (EditText) dialog.findViewById(R.id.edt_count);
         final Button btn_send = (Button) dialog.findViewById(R.id.btn_send);
+        final ImageView img_close = (ImageView) dialog.findViewById(R.id.img_close);
+        img_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
         InputMethodManager imm = (InputMethodManager) parent.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!Utility.isValueNullOrEmpty(edt_count.getText().toString())) {
-                    DashBoardActivity.count.set(which, Integer.parseInt(edt_count.getText().toString()));
-                    dialog.dismiss();
+                    if (tag.equalsIgnoreCase("Summary")){
+                        SummaryActivity.count.set(which, Integer.parseInt(edt_count.getText().toString()));
+                        dialog.dismiss();
+                        parent.hideKeyboard(parent);
+                        SummaryActivity.summeryListAdapter.notifyDataSetChanged();
+                    } else {
+                        HomeFragment.count.set(which, Integer.parseInt(edt_count.getText().toString()));
+                        dialog.dismiss();
+                        parent.hideKeyboard(parent);
+                        HomeFragment.adapter.notifyDataSetChanged();
+                    }
                 } else {
                     Utility.showToastMessage(parent, "Enter count");
                 }
@@ -483,5 +513,44 @@ public class Utility {
         mDialog.show();
     }
 
+    /*Get Font Awesome Web font Type face*/
+    public static Typeface setRobotoRegular(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
+    }
 
+    /*Get Font Awesome Web font Type face*/
+    public static Typeface setRobotoBold(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Bold.ttf");
+    }
+
+    public static Typeface setLucidaSansItalic(Context context) {
+        return Typeface.createFromAsset(context.getAssets(), "fonts/Lucida Sans Italic.ttf");
+    }
+
+    public static void navigateDashBoardFragment(Fragment fragment,
+                                                 String tag, Bundle bundle, FragmentActivity fragmentActivity) {
+        FragmentManager fragmentManager = fragmentActivity
+                .getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction();
+        /*fragmentTransaction.setCustomAnimations(R.anim.slide_left_right,
+                R.anim.fade_out);*/
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+        }
+        fragmentTransaction.replace(R.id.content_frame, fragment, tag);
+        fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
+    }
+
+    /**
+     * ASSIGN THE COLOR
+     **/
+    public static int getColor(Context context, int id) {
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 23)
+            return ContextCompat.getColor(context, id);
+        else
+            return context.getResources().getColor(id);
+    }
 }

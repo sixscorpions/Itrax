@@ -5,12 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import com.itrax.R;
 import com.itrax.activities.BaseActivity;
 import com.itrax.activities.DashBoardActivity;
+import com.itrax.activities.WorkBenchActivity;
+import com.itrax.fragments.HomeFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +24,7 @@ import java.util.List;
 public class SpinnerDialogAdapterForMedicines extends ArrayAdapter<String> {
 
     private List<String> spinnerModel;
+    private List<String> sortedList;
     private LayoutInflater inflater;
     private BaseActivity parent;
 
@@ -64,8 +69,8 @@ public class SpinnerDialogAdapterForMedicines extends ArrayAdapter<String> {
 
         String mData = spinnerModel.get(position);
         holder.tv_title.setText(mData);
-        if (DashBoardActivity.count.get(position) != 0) {
-            holder.tv_count.setText("" + DashBoardActivity.count.get(position));
+        if (HomeFragment.count.get(position) != 0) {
+            holder.tv_count.setText("" + HomeFragment.count.get(position));
         } else {
             holder.tv_count.setText("");
         }
@@ -73,6 +78,52 @@ public class SpinnerDialogAdapterForMedicines extends ArrayAdapter<String> {
         return convertView;
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
+                List<String> FilteredArrList = new ArrayList<>();
+
+
+                if (sortedList == null) {
+                    sortedList = new ArrayList<>(spinnerModel); // saves the original data in mOriginalValues
+                }
+
+                /********
+                 *
+                 *  If constraint(CharSequence that is received) is null returns the mOriginalValues(Original) values
+                 *  else does the Filtering and returns FilteredArrList(Filtered)
+                 *
+                 ********/
+                if (constraint == null || constraint.length() == 0) {
+
+                    // set the Original result to return
+                    results.count = sortedList.size();
+                    results.values = sortedList;
+                } else {
+                    constraint = constraint.toString().toLowerCase();
+                    for (int i = 0; i < sortedList.size(); i++) {
+                        String data = sortedList.get(i);
+                        if (data.toLowerCase().contains(constraint.toString())) {
+                            FilteredArrList.add(data);
+                        }
+                    }
+                    // set the Filtered result to return
+                    results.count = FilteredArrList.size();
+                    results.values = FilteredArrList;
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                spinnerModel = (ArrayList<String>) results.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
     private class ViewHolder {
         private TextView tv_title;

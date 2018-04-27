@@ -71,5 +71,15 @@
 
     <string name="nine_ninety">0</string>
     <string name="count">Count</string>
-
+    <string name="home">Home</string>
+    <string name="doctors_visit">Doctors Visit</string>
+    <string name="inventory">Orders</string>
+    <string name="submit">Submit</string>
+    <string name="doctor_name">Doctor Name</string>
+    <string name="medicines">Medicines</string>
+    <string name="email">Email</string>
+    <string name="write_here">Write here</string>
+    <string name="search">Search</string>
+    <string name="search_icon">&#xE8B6;</string>
+    <string name="summery">summary</string>
 </resources>

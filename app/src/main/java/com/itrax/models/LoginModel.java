@@ -39,6 +39,7 @@ public class LoginModel extends Model {
     private String VehicleNumber;
     private ArrayList<DynamicFieldsModel> dynamicFieldsModels;
     private boolean OTPRequired;
+    private String Token;
 
     public int getId() {
         return Id;
@@ -282,5 +283,13 @@ public class LoginModel extends Model {
 
     public void setOTPRequired(boolean OTPRequired) {
         this.OTPRequired = OTPRequired;
+    }
+
+    public String getToken() {
+        return Token;
+    }
+
+    public void setToken(String token) {
+        Token = token;
     }
 }

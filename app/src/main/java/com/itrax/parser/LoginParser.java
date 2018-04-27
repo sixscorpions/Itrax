@@ -62,6 +62,9 @@ public class LoginParser implements Parser<Model> {
             if (jsonObject.has("VehicleNumber"))
                 loginModel.setVehicleNumber(jsonObject.optString("VehicleNumber"));
 
+            if (jsonObject.has("Token"))
+                loginModel.setToken(jsonObject.optString("Token"));
+
             if (jsonObject.has("OTPRequired"))
                 loginModel.setOTPRequired(jsonObject.optBoolean("OTPRequired"));
 

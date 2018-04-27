@@ -4,9 +4,9 @@
      <color name="colorPrimaryDark">#3f5964</color>
      <color name="colorAccent">#698592</color>-->
 
-    <color name="colorPrimary">#223540</color>
-    <color name="colorPrimaryDark">#99bdb1</color>
-    <color name="colorAccent">#223540</color>
+    <color name="colorPrimary">#000310</color>
+    <color name="colorPrimaryDark">#011A34</color>
+    <color name="colorAccent">#000310</color>
 
     <color name="dialogBgColor">#55000000</color>
     <color name="svThumbColor">#26111111</color>
@@ -23,6 +23,15 @@
     <color name="bg_color">#223641</color>
     <color name="font_color">#363636</color>
     <color name="top_font">#6ec2b3</color>
+    <color name="edit_hint_color">#00C7FF</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorblack">#000000</color>
+    <color name="start_color">#005581</color>
+    <color name="end_color">#019EC7</color>
+    <color name="text_hint_color">#DEE6EB</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="dialog_header_color">#0196BE</color>
+    <color name="header_color">#00020A</color>
 
 
 </resources>

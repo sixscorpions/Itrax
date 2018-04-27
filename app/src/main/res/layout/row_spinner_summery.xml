@@ -7,18 +7,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/_45dp">
+        android:minHeight="@dimen/_60dp">
 
         <TextView
             android:id="@+id/tv_count"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_80dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/_5dp"
+            android:background="@drawable/summary_count_bg"
             android:gravity="center"
             android:minHeight="@dimen/_45dp"
-            android:textColor="@color/submit_bg_ground"
+            android:text="25"
+            android:textColor="@color/start_color"
             android:textSize="@dimen/_16sp"
             android:textStyle="bold" />
 
@@ -26,7 +28,8 @@
             android:id="@+id/tv_title"
             style="@style/textview"
             android:layout_centerVertical="true"
-            android:gravity="center"
+            android:layout_marginLeft="@dimen/_10dp"
+            android:layout_marginStart="@dimen/_10dp"
             android:minHeight="@dimen/_45dp"
             android:textColor="#787878"
             android:textSize="@dimen/_16sp"
