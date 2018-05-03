@@ -23,6 +23,7 @@ public class LoginParser implements Parser<Model> {
         LoginModel loginModel = new LoginModel();
         try {
             JSONObject jsonObject = new JSONObject(s);
+            Utility.showLog("Response", "" + s);
             if (jsonObject.has("Id"))
                 loginModel.setId(jsonObject.optInt("Id"));
             if (jsonObject.has("OrganizationId"))
@@ -64,6 +65,9 @@ public class LoginParser implements Parser<Model> {
 
             if (jsonObject.has("Token"))
                 loginModel.setToken(jsonObject.optString("Token"));
+
+            if (jsonObject.has("TypeOfBusiness"))
+                loginModel.setTypeOfBusiness(jsonObject.optString("TypeOfBusiness"));
 
             if (jsonObject.has("OTPRequired"))
                 loginModel.setOTPRequired(jsonObject.optBoolean("OTPRequired"));

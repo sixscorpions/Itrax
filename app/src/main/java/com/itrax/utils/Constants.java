@@ -7,12 +7,13 @@ package com.itrax.utils;
 public class Constants {
 
     // Log message On or Off
-    public static final boolean logMessageOnOrOff = false;
+    public static final boolean logMessageOnOrOff = true;
     public static final String IMAGES_FOLDER = "Images/";
 
     public static final String APP_PREF = "Itrax_Pref";
     public static final String LOGIN_ID = "Login_ID";
     public static final String LOGIN_SESSION_ID = "LOGIN_SESSION_ID";
+    public static final String TYPE_OF_BUSINESS = "TYPE_OF_BUSINESS";
 
     public static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
 

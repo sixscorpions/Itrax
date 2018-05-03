@@ -42,6 +42,8 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
             getLocationPermission();
         }
 
+        edtUsername.setText("9652232101");
+        edtPassword.setText("1234");
         /*edtUsername.setText("7799920200");
         edtPassword.setText("1234");*/
     }
@@ -148,8 +150,14 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
                 Utility.setSharedPrefStringData(LoginActivity.this, Constants.LOGIN_ID, "" + loginModel.getId());
 
                 Utility.setSharedPrefStringData(LoginActivity.this, Constants.LOGIN_SESSION_ID, "" + loginModel.getToken());
+                Utility.setSharedPrefStringData(LoginActivity.this, Constants.TYPE_OF_BUSINESS, "" + loginModel.getTypeOfBusiness());
 
-                Intent intent = new Intent(LoginActivity.this, DashBoardActivity.class);
+                Intent intent;
+                if (!Utility.isValueNullOrEmpty(loginModel.getTypeOfBusiness())) {
+                    intent = new Intent(this, WorkBenchActivity.class);
+                } else {
+                    intent = new Intent(this, DashBoardActivity.class);
+                }
                 startActivity(intent);
 
                 Utility.setSharedPrefStringData(LoginActivity.this, Constants.USER_NAME, "");

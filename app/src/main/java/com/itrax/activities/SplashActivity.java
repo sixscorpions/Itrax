@@ -23,7 +23,11 @@ public class SplashActivity extends BaseActivity {
                 if (Utility.isValueNullOrEmpty(Utility.getSharedPrefStringData(SplashActivity.this, Constants.LOGIN_SESSION_ID))) {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
                 } else {
-                    intent = new Intent(SplashActivity.this, WorkBenchActivity.class);
+                    if (!Utility.isValueNullOrEmpty(Utility.getSharedPrefStringData(SplashActivity.this, Constants.TYPE_OF_BUSINESS))) {
+                        intent = new Intent(SplashActivity.this, WorkBenchActivity.class);
+                    } else {
+                        intent = new Intent(SplashActivity.this, DashBoardActivity.class);
+                    }
                 }
                 startActivity(intent);
                 finish();

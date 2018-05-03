@@ -38,6 +38,7 @@ import com.itrax.activities.LoginActivity;
 import com.itrax.activities.SummaryActivity;
 import com.itrax.adapters.SpinnerDialogAdapter;
 import com.itrax.adapters.SpinnerDialogAdapterForMedicines;
+import com.itrax.adapters.SpinnerDialogWorkBenchAdapter;
 import com.itrax.fragments.HomeFragment;
 
 import org.apache.http.HttpResponse;
@@ -300,6 +301,32 @@ public class Utility {
         builderSingle.show();
     }
 
+    public static void showSpinnerDialogWorkBench(BaseActivity parent, String title,
+                                         List<String> mList, final EditText et) {
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(parent);
+
+        /*CUSTOM TITLE*/
+        LayoutInflater inflater = (LayoutInflater) parent.getSystemService
+                (Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_include_dialog_header, null);
+        TextView tv_title = (TextView) view.findViewById(R.id.tv_alert_dialog_title);
+        builderSingle.setCustomTitle(view);
+        tv_title.setText(title);
+
+        final SpinnerDialogWorkBenchAdapter adapter = new SpinnerDialogWorkBenchAdapter(parent,
+                100, mList);
+        builderSingle.setAdapter(adapter,
+                new DialogInterface.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String mData = adapter.getItem(which);
+                        et.setText("" + mData);
+                    }
+                });
+        builderSingle.show();
+    }
 
     public static void showSpinnerDialogForMedicines(final BaseActivity parent, String title,
                                                      List<String> mList, final EditText et) {

@@ -40,6 +40,7 @@ public class LoginModel extends Model {
     private ArrayList<DynamicFieldsModel> dynamicFieldsModels;
     private boolean OTPRequired;
     private String Token;
+    private String TypeOfBusiness;
 
     public int getId() {
         return Id;
@@ -291,5 +292,13 @@ public class LoginModel extends Model {
 
     public void setToken(String token) {
         Token = token;
+    }
+
+    public String getTypeOfBusiness() {
+        return TypeOfBusiness;
+    }
+
+    public void setTypeOfBusiness(String typeOfBusiness) {
+        TypeOfBusiness = typeOfBusiness;
     }
 }

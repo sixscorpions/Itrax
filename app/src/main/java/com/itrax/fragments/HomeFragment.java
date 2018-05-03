@@ -55,14 +55,16 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.edt_mobile_number)
     EditText edt_mobile_number;
-    @BindView(R.id.edt_medicines)
-    EditText edt_medicines;
-    static EditText edt_delivery_date;
 
+    @BindView(R.id.ll_dynamic_data)
+    LinearLayout ll_dynamic_data;
+
+    static EditText edt_delivery_date;
     private LoginModel mLoginModel;
     public static ArrayList<Integer> count = new ArrayList<>();
     private static ArrayList<String> stringList;
     public static SpinnerDialogAdapterForMedicines adapter;
+    private ArrayList<EditText> views = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,8 +95,7 @@ public class HomeFragment extends Fragment {
         if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
                 && mLoginModel.getDynamicFieldsModels().size() > 0) {
             for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
-                if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("DropdownPopup")
-                        && mLoginModel.getDynamicFieldsModels().get(i).getLabel().equalsIgnoreCase("Medicines")) {
+                if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("DropdownPopup")) {
                     String mListNames = mLoginModel.getDynamicFieldsModels().get(i).getList();
                     String[] array_list = mListNames.split(", ");
                     stringList = new ArrayList<>();
@@ -105,17 +106,13 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
+        setDynamicData();
     }
 
     @OnClick({R.id.edt_delivery_date})
     void onDeliveryDate() {
         DashBoardActivity.SelectDateFragment newFragment = new DashBoardActivity.SelectDateFragment(edt_delivery_date);
         newFragment.show(mParent.getSupportFragmentManager(), "DatePicker");
-    }
-
-    @OnClick({R.id.edt_medicines})
-    void onShowSpinnerDialogForMedicines() {
-        showSpinnerDialogForMedicines();
     }
 
     private void showSpinnerDialogForMedicines() {
@@ -169,6 +166,62 @@ public class HomeFragment extends Fragment {
         tv_et_search_image.setTypeface(Utility.getMaterialIconsRegular(mParent));
 
         dialog.show();
+    }
+
+    /**
+     * This method is used to set the dynamic data
+     */
+    private void setDynamicData() {
+        ll_dynamic_data.removeAllViews();
+        String json = Utility.getSharedPrefStringData(mParent, Constants.LOGIN_RESPONSE);
+        if (!Utility.isValueNullOrEmpty(json)) {
+            LoginParser loginParser = new LoginParser();
+            mLoginModel = (LoginModel) loginParser.parse(json, mParent);
+        }
+        if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
+                && mLoginModel.getDynamicFieldsModels().size() > 0) {
+            for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
+                if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Text")) {
+                    LinearLayout linearLayout = (LinearLayout) mParent.getLayoutInflater().inflate(R.layout.edit_workbench_text_dynamic, null);
+                    EditText editText = (EditText) linearLayout.findViewById(R.id.edt_id);
+                    editText.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    views.add(editText);
+                    ll_dynamic_data.addView(linearLayout);
+                } else if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("DropdownPopup")) {
+                    LinearLayout linearLayout3 = (LinearLayout) mParent.getLayoutInflater().inflate(R.layout.edit_workbench_medicines_dynamic, null);
+                    final EditText editTextSpinner = (EditText) linearLayout3.findViewById(R.id.edt_spinner);
+                    editTextSpinner.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    editTextSpinner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showSpinnerDialogForMedicines();
+                        }
+                    });
+                    views.add(editTextSpinner);
+                    ll_dynamic_data.addView(linearLayout3);
+                } else if (mLoginModel.getDynamicFieldsModels().get(i).getType().equalsIgnoreCase("Dropdown")) {
+                    LinearLayout linearLayout3 = (LinearLayout) mParent.getLayoutInflater().inflate(R.layout.edit_workbench_spinner_dynamic, null);
+                    final EditText editTextSpinner = (EditText) linearLayout3.findViewById(R.id.edt_spinner);
+                    editTextSpinner.setHint(mLoginModel.getDynamicFieldsModels().get(i).getLabel());
+                    final String mName = mLoginModel.getDynamicFieldsModels().get(i).getLabel();
+
+                    String mListNames = mLoginModel.getDynamicFieldsModels().get(i).getList();
+                    String[] array_list = mListNames.split(", ");
+                    final List<String> stringList = new ArrayList<>();
+                    for (int k = 0; k < array_list.length; k++) {
+                        stringList.add(array_list[k]);
+                    }
+                    editTextSpinner.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utility.showSpinnerDialogWorkBench(mParent, mName, stringList, editTextSpinner);
+                        }
+                    });
+                    views.add(editTextSpinner);
+                    ll_dynamic_data.addView(linearLayout3);
+                }
+            }
+        }
     }
 
     @OnClick(R.id.btn_submit)
