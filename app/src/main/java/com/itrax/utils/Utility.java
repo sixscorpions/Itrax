@@ -302,7 +302,7 @@ public class Utility {
     }
 
     public static void showSpinnerDialogWorkBench(BaseActivity parent, String title,
-                                         List<String> mList, final EditText et) {
+                                                  List<String> mList, final EditText et) {
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(parent);
 
@@ -382,7 +382,7 @@ public class Utility {
             @Override
             public void onClick(View view) {
                 if (!Utility.isValueNullOrEmpty(edt_count.getText().toString())) {
-                    if (tag.equalsIgnoreCase("Summary")){
+                    if (tag.equalsIgnoreCase("Summary")) {
                         SummaryActivity.count.set(which, Integer.parseInt(edt_count.getText().toString()));
                         dialog.dismiss();
                         parent.hideKeyboard(parent);
@@ -412,7 +412,8 @@ public class Utility {
         HttpResponse response;
         HttpPost post = new HttpPost(url);
         Utility.showLog("session id ", "Session" + Utility.getSharedPrefStringData(context, Constants.LOGIN_SESSION_ID));
-        post.setHeader("Cookie", "connect.sid=" + Utility.getSharedPrefStringData(context, Constants.LOGIN_SESSION_ID));
+        //post.setHeader("Cookie", "connect.sid=" + Utility.getSharedPrefStringData(context, Constants.LOGIN_SESSION_ID));
+        post.setHeader("token", Utility.getSharedPrefStringData(context, Constants.LOGIN_SESSION_ID));
         StringEntity se;
         try {
             se = new StringEntity(getJsonParams(mParams));
@@ -490,7 +491,7 @@ public class Utility {
         mDialog.show();
     }
 
-    public static void showOKOnlyDialog(final DashBoardActivity context, String msg,
+    public static void showOKOnlyDialog(final BaseActivity context, String msg,
                                         String title) {
 
         final Dialog mDialog = new Dialog(context);

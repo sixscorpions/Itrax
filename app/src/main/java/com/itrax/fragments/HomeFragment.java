@@ -50,21 +50,18 @@ public class HomeFragment extends Fragment {
     private WorkBenchActivity mParent;
     private View view;
 
-    @BindView(R.id.edt_doctor_name)
-    EditText edt_doctor_name;
-
-    @BindView(R.id.edt_mobile_number)
-    EditText edt_mobile_number;
-
     @BindView(R.id.ll_dynamic_data)
     LinearLayout ll_dynamic_data;
 
-    static EditText edt_delivery_date;
+    public static EditText edt_delivery_date;
+    public static EditText edtNote;
+    public static EditText edt_doctor_name;
+    public static EditText edt_mobile_number;
     private LoginModel mLoginModel;
     public static ArrayList<Integer> count = new ArrayList<>();
     private static ArrayList<String> stringList;
     public static SpinnerDialogAdapterForMedicines adapter;
-    private ArrayList<EditText> views = new ArrayList<>();
+    public static ArrayList<EditText> views = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,7 +88,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void initUi() {
+        edt_doctor_name = (EditText) view.findViewById(R.id.edt_doctor_name);
         edt_delivery_date = (EditText) view.findViewById(R.id.edt_delivery_date);
+        edtNote = (EditText) view.findViewById(R.id.et_invite_note);
+        edt_mobile_number = (EditText) view.findViewById(R.id.edt_mobile_number);
         if (mLoginModel != null && mLoginModel.getDynamicFieldsModels() != null
                 && mLoginModel.getDynamicFieldsModels().size() > 0) {
             for (int i = 0; i < mLoginModel.getDynamicFieldsModels().size(); i++) {
@@ -226,11 +226,37 @@ public class HomeFragment extends Fragment {
 
     @OnClick(R.id.btn_submit)
     void submitData() {
-        Intent intent = new Intent(mParent, SummaryActivity.class);
-        intent.putStringArrayListExtra(Constants.SELECTED_LIST, getFinalSelectionList());
-        intent.putIntegerArrayListExtra(Constants.SELECTED_COUNT, getFinalCountSelectionList());
-        startActivity(intent);
+        if (isValidFields()) {
+            Intent intent = new Intent(mParent, SummaryActivity.class);
+            intent.putStringArrayListExtra(Constants.SELECTED_LIST, getFinalSelectionList());
+            intent.putIntegerArrayListExtra(Constants.SELECTED_COUNT, getFinalCountSelectionList());
+            startActivity(intent);
+        }
     }
+
+    private boolean isValidFields() {
+        boolean isValidated = false;
+        if (Utility.isValueNullOrEmpty(edt_doctor_name.getText().toString().trim())) {
+            Utility.setSnackBar(edt_doctor_name, "Please enter doctor name");
+            edt_doctor_name.requestFocus();
+        } else if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString().trim())) {
+            Utility.setSnackBar(edt_mobile_number, "Please enter mobile number");
+            edt_mobile_number.requestFocus();
+        } else if (edt_mobile_number.getText().toString().trim().length() < 10) {
+            Utility.setSnackBar(edt_mobile_number, "Please enter valid mobile number");
+            edt_mobile_number.requestFocus();
+        } else if (edt_mobile_number.getText().toString().trim().length() < 10) {
+            Utility.setSnackBar(edt_mobile_number, "Please enter valid mobile number");
+            edt_mobile_number.requestFocus();
+        } else if (getFinalCountSelectionList() != null && getFinalCountSelectionList().size() == 0) {
+            Utility.setSnackBar(edt_mobile_number, "Please select medicines");
+            edt_mobile_number.requestFocus();
+        } else {
+            isValidated = true;
+        }
+        return isValidated;
+    }
+
 
     private ArrayList<String> getFinalSelectionList() {
         ArrayList<String> strings = new ArrayList<>();

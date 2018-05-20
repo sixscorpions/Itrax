@@ -24,16 +24,16 @@ public class DBConstants {
     public static final String CREATE_TABLE_CREATE_SALES = "CREATE TABLE IF NOT EXISTS " +
             TABLE_CREATE_SALES_HISTORY
             + "(" + CREATE_SALES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + CREATE_SALES_COORDINATES + "  TEXT NOT NULL, "
-            + CREATE_SALES_AREA + "  TEXT NOT NULL, "
-            + CREATE_SALES_TIME + "  TEXT NOT NULL, "
-            + CREATE_SALES_NOTE + "  TEXT NOT NULL, "
-            + CREATE_SALES_CUSTOMER_NAME + "  TEXT NOT NULL, "
-            + CREATE_SALES_CUSTOMER_MOBILE + "  TEXT NOT NULL, "
-            + CREATE_SALES_DUE_DATE + "  TEXT NOT NULL, "
-            + CREATE_SALES_ISOTPVERIFIED + "  TEXT NOT NULL,"
-            + CREATE_SALES_INITIATED_DATE + "  TEXT NOT NULL,"
-            + CREATE_SALES_INITIATED_TIME + "  TEXT NOT NULL,"
-            + CREATE_SALES_ADDITIONAL_INFO + "  TEXT NOT NULL"
+            + CREATE_SALES_COORDINATES + "  TEXT , "
+            + CREATE_SALES_AREA + "  TEXT , "
+            + CREATE_SALES_TIME + "  TEXT , "
+            + CREATE_SALES_NOTE + "  TEXT , "
+            + CREATE_SALES_CUSTOMER_NAME + "  TEXT , "
+            + CREATE_SALES_CUSTOMER_MOBILE + "  TEXT , "
+            + CREATE_SALES_DUE_DATE + "  TEXT , "
+            + CREATE_SALES_ISOTPVERIFIED + "  TEXT ,"
+            + CREATE_SALES_INITIATED_DATE + "  TEXT ,"
+            + CREATE_SALES_INITIATED_TIME + "  TEXT ,"
+            + CREATE_SALES_ADDITIONAL_INFO + "  TEXT "
             + ")";
 }

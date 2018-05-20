@@ -7,6 +7,7 @@ import android.os.Build;
 
 
 import com.itrax.R;
+import com.itrax.activities.BaseActivity;
 import com.itrax.activities.DashBoardActivity;
 import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.models.Model;
@@ -23,7 +24,7 @@ public class ServerIntractorAsync extends BaseAsynkTask {
     private String mResponse = null;
     private Model model;
 
-    public ServerIntractorAsync(DashBoardActivity context, String dialogMessage,
+    public ServerIntractorAsync(BaseActivity context, String dialogMessage,
                                 boolean showDialog, String url, LinkedHashMap<String, String> mParamMap,
                                 APIConstants.REQUEST_TYPE requestType, IAsyncCaller caller, Parser parser) {
         super(context, dialogMessage, showDialog, url, mParamMap, requestType,
