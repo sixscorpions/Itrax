@@ -34,18 +34,35 @@
             android:layout_height="@dimen/_40dp"
             android:background="@color/colorWhite" />
 
-        <TextView
-            android:id="@+id/tv_inventory"
+        <RelativeLayout
             android:layout_width="@dimen/_0dp"
             android:layout_height="@dimen/_40dp"
             android:layout_weight="0.5"
-            android:background="@drawable/rectangel_edit_fill_right"
-            android:gravity="center"
-            android:text="@string/inventory"
-            android:textAllCaps="true"
-            android:textColor="@color/start_color"
-            android:textSize="@dimen/_16sp" />
+            android:background="@drawable/rectangel_edit_fill_right">
 
+            <TextView
+                android:id="@+id/tv_inventory"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40dp"
+                android:gravity="center"
+                android:text="@string/inventory"
+                android:textAllCaps="true"
+                android:textColor="@color/start_color"
+                android:textSize="@dimen/_16sp" />
+
+            <TextView
+                android:id="@+id/tv_off_line_count"
+                android:layout_width="@dimen/_32dp"
+                android:layout_height="@dimen/_32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10dp"
+                android:background="@drawable/drawable_count_button"
+                android:gravity="center"
+                android:text="@string/nine_ninety"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_15sp" />
+        </RelativeLayout>
     </LinearLayout>
 
     <ScrollView

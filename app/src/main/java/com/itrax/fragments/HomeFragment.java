@@ -29,12 +29,27 @@ import com.itrax.activities.DashBoardActivity;
 import com.itrax.activities.SummaryActivity;
 import com.itrax.activities.WorkBenchActivity;
 import com.itrax.adapters.SpinnerDialogAdapterForMedicines;
+import com.itrax.aynctask.IAsyncCaller;
+import com.itrax.aynctaskold.ServerIntractorAsync;
+import com.itrax.db.CreateSalesDataSource;
+import com.itrax.db.DatabaseHandler;
+import com.itrax.models.CreateSalesModel;
 import com.itrax.models.LoginModel;
+import com.itrax.models.Model;
+import com.itrax.models.PostNoteModel;
+import com.itrax.models.SendOtpModel;
 import com.itrax.parser.LoginParser;
+import com.itrax.parser.PostNoteParser;
+import com.itrax.utils.APIConstants;
 import com.itrax.utils.Constants;
 import com.itrax.utils.Utility;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,13 +60,16 @@ import butterknife.OnClick;
  * Created by Shankar on 18-04-18.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements IAsyncCaller {
     public static final String TAG = HomeFragment.class.getSimpleName();
     private WorkBenchActivity mParent;
     private View view;
 
     @BindView(R.id.ll_dynamic_data)
     LinearLayout ll_dynamic_data;
+
+    @BindView(R.id.tv_off_line_count)
+    TextView tv_off_line_count;
 
     public static EditText edt_delivery_date;
     public static EditText edtNote;
@@ -62,6 +80,8 @@ public class HomeFragment extends Fragment {
     private static ArrayList<String> stringList;
     public static SpinnerDialogAdapterForMedicines adapter;
     public static ArrayList<EditText> views = new ArrayList<>();
+
+    private CreateSalesDataSource createSalesDatasource;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,6 +108,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void initUi() {
+        DatabaseHandler.getInstance(mParent);
+        createSalesDatasource = new CreateSalesDataSource(mParent);
+        if (createSalesDatasource.getDataCount() > 0) {
+            tv_off_line_count.setText("" + createSalesDatasource.getDataCount());
+            tv_off_line_count.setVisibility(View.VISIBLE);
+        } else
+            tv_off_line_count.setVisibility(View.GONE);
+
         edt_doctor_name = (EditText) view.findViewById(R.id.edt_doctor_name);
         edt_delivery_date = (EditText) view.findViewById(R.id.edt_delivery_date);
         edtNote = (EditText) view.findViewById(R.id.et_invite_note);
@@ -279,4 +307,67 @@ public class HomeFragment extends Fragment {
     }
 
 
+    /**
+     * This method is used for sync
+     */
+    @OnClick(R.id.tv_off_line_count)
+    void sync() {
+        postLocationData();
+    }
+
+    private void postLocationData() {
+        final ArrayList<CreateSalesModel> createSalesModels = createSalesDatasource.selectAll();
+        JSONArray jsonSalesRecordsArray = new JSONArray();
+        if (createSalesModels != null && createSalesModels.size() > 0) {
+            for (int i = 0; i < createSalesModels.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("Coordinates", createSalesModels.get(i).getCoordinates());
+                    jsonObject.put("Area", createSalesModels.get(i).getArea());
+                    jsonObject.put("Country", "India");
+                    jsonObject.put("Time", createSalesModels.get(i).getTime());
+                    jsonObject.put("Note", createSalesModels.get(i).getNote());
+                    jsonObject.put("CustomerName", createSalesModels.get(i).getCustomer_name());
+                    jsonObject.put("CustomerMobile", createSalesModels.get(i).getCustomer_mobile());
+                    jsonObject.put("DueDate", createSalesModels.get(i).getDue_date());
+                    jsonObject.put("IsOtpVerified", createSalesModels.get(i).getIsotpverified());
+                    jsonObject.put("Source", "android");
+                    jsonObject.put("InitiatedDate", createSalesModels.get(i).getInitiatedDate());
+                    jsonObject.put("InitiatedTime", createSalesModels.get(i).getInitiatedTime());
+                    jsonObject.put("AdditionalInfo", createSalesModels.get(i).getAdditional_info());
+                    jsonSalesRecordsArray.put(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        try {
+            LinkedHashMap linkedHashMap = new LinkedHashMap();
+            linkedHashMap.put("SalesRecords", jsonSalesRecordsArray);
+            PostNoteParser mPostNoteParser = new PostNoteParser();
+            ServerIntractorAsync serverJSONAsyncTask = new ServerIntractorAsync(
+                    mParent, Utility.getResourcesString(mParent, R.string.please_wait), true,
+                    APIConstants.CREATE_SALES_RECORD, linkedHashMap,
+                    APIConstants.REQUEST_TYPE.POST, this, mPostNoteParser);
+            Utility.execute(serverJSONAsyncTask);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onComplete(Model model) {
+        if (model != null) {
+            if (model instanceof PostNoteModel) {
+                PostNoteModel mPostNoteModel = (PostNoteModel) model;
+                if (mPostNoteModel.isStatus()) {
+                    createSalesDatasource.deleteAll();
+                    tv_off_line_count.setVisibility(View.GONE);
+                    Utility.showToastMessage(mParent, "Offline data sent successfully");
+                }
+            }
+        }
+    }
 }
