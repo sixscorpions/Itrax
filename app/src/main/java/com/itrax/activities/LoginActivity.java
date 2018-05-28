@@ -153,7 +153,8 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
                 Utility.setSharedPrefStringData(LoginActivity.this, Constants.TYPE_OF_BUSINESS, "" + loginModel.getTypeOfBusiness());
 
                 Intent intent;
-                if (!Utility.isValueNullOrEmpty(loginModel.getTypeOfBusiness())) {
+                if (!Utility.isValueNullOrEmpty(loginModel.getTypeOfBusiness())
+                        && loginModel.getTypeOfBusiness().equalsIgnoreCase("pharma")) {
                     intent = new Intent(this, WorkBenchActivity.class);
                 } else {
                     intent = new Intent(this, DashBoardActivity.class);

@@ -15,8 +15,8 @@ public class APIConstants {
 
     public static String ERROR_MESSAGE = "We could not process your request at this time. Please try again later.";
 
-    public static String BASE_URL = "https://itraxpro.com/api/v1.0/";
-    //public static String BASE_URL = "http://icuepro.com/api/v1.0/";
+    //public static String BASE_URL = "https://itraxpro.com/api/v1.0/";
+    public static String BASE_URL = "https://icuepro.com/api/v1.0/";
     //public static String LOGIN_URL = BASE_URL + "driverLogin";
     public static String LOGIN_URL = BASE_URL + "executiveLogin";
     public static String PLOTPROPOINT_URL = BASE_URL + "plotProPoint";
