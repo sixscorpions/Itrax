@@ -7,7 +7,7 @@ package com.itrax.utils;
 public class Constants {
 
     // Log message On or Off
-    public static final boolean logMessageOnOrOff = true;
+    public static final boolean logMessageOnOrOff = false;
     public static final String IMAGES_FOLDER = "Images/";
 
     public static final String APP_PREF = "Itrax_Pref";
