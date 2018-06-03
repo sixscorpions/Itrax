@@ -94,7 +94,7 @@
         android:layout_marginTop="@dimen/_5dp"
         android:background="@drawable/login_button_new"
         android:minHeight="@dimen/_50dp"
-        android:text="@string/send"
+        android:text="@string/alert_dialog_ok"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/_20sp" />
