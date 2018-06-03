@@ -730,7 +730,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
             int yy = calendar.get(Calendar.YEAR);
             int mm = calendar.get(Calendar.MONTH);
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            return new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setMinDate(System.currentTimeMillis());
+            return dialog;
         }
 
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {

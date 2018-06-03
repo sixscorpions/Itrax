@@ -31,8 +31,6 @@
             android:textColor="#787878"
             android:textSize="@dimen/_16sp"
             android:textStyle="bold" />
-
-
     </RelativeLayout>
 
     <View

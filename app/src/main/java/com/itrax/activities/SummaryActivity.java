@@ -530,11 +530,11 @@ public class SummaryActivity extends BaseActivity implements GoogleApiClient.Con
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDialog.dismiss();
-                Intent intent = new Intent(
+                /*Intent intent = new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 SummaryActivity.this.startActivity(intent);
                 SummaryActivity.this.finish();
-                System.exit(0);
+                System.exit(0);*/
             }
         });
         mDialog.show();

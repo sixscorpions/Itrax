@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.itrax.R;
 import com.itrax.activities.BaseActivity;
-import com.itrax.activities.DashBoardActivity;
-import com.itrax.activities.WorkBenchActivity;
 import com.itrax.fragments.HomeFragment;
 
 import java.util.ArrayList;
@@ -69,7 +67,7 @@ public class SpinnerDialogAdapterForMedicines extends ArrayAdapter<String> {
 
         String mData = spinnerModel.get(position);
         holder.tv_title.setText(mData);
-        if (HomeFragment.count.get(position) != 0) {
+        if (HomeFragment.count.get(position) != -1) {
             holder.tv_count.setText("" + HomeFragment.count.get(position));
         } else {
             holder.tv_count.setText("");

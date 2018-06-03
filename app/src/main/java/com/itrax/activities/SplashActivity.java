@@ -23,7 +23,8 @@ public class SplashActivity extends BaseActivity {
                 if (Utility.isValueNullOrEmpty(Utility.getSharedPrefStringData(SplashActivity.this, Constants.LOGIN_SESSION_ID))) {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
                 } else {
-                    if (!Utility.isValueNullOrEmpty(Utility.getSharedPrefStringData(SplashActivity.this, Constants.TYPE_OF_BUSINESS))) {
+                    if (!Utility.isValueNullOrEmpty(Utility.getSharedPrefStringData(SplashActivity.this, Constants.TYPE_OF_BUSINESS)) &&
+                            Utility.getSharedPrefStringData(SplashActivity.this, Constants.TYPE_OF_BUSINESS).equalsIgnoreCase("pharma")) {
                         intent = new Intent(SplashActivity.this, WorkBenchActivity.class);
                     } else {
                         intent = new Intent(SplashActivity.this, DashBoardActivity.class);

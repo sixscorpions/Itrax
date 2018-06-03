@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment implements IAsyncCaller {
                     stringList = new ArrayList<>();
                     for (int k = 0; k < array_list.length; k++) {
                         stringList.add(array_list[k]);
-                        count.add(0);
+                        count.add(-1);
                     }
                 }
             }
@@ -267,7 +267,7 @@ public class HomeFragment extends Fragment implements IAsyncCaller {
         if (Utility.isValueNullOrEmpty(edt_doctor_name.getText().toString().trim())) {
             Utility.setSnackBar(edt_doctor_name, "Please enter doctor name");
             edt_doctor_name.requestFocus();
-        } else if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString().trim())) {
+        } /*else if (Utility.isValueNullOrEmpty(edt_mobile_number.getText().toString().trim())) {
             Utility.setSnackBar(edt_mobile_number, "Please enter mobile number");
             edt_mobile_number.requestFocus();
         } else if (edt_mobile_number.getText().toString().trim().length() < 10) {
@@ -279,7 +279,7 @@ public class HomeFragment extends Fragment implements IAsyncCaller {
         } else if (getFinalCountSelectionList() != null && getFinalCountSelectionList().size() == 0) {
             Utility.setSnackBar(edt_mobile_number, "Please select medicines");
             edt_mobile_number.requestFocus();
-        } else {
+        } */ else {
             isValidated = true;
         }
         return isValidated;
@@ -289,7 +289,7 @@ public class HomeFragment extends Fragment implements IAsyncCaller {
     private ArrayList<String> getFinalSelectionList() {
         ArrayList<String> strings = new ArrayList<>();
         for (int i = 0; i < count.size(); i++) {
-            if (count.get(i) != 0) {
+            if (count.get(i) != -1) {
                 strings.add(stringList.get(i));
             }
         }
@@ -299,7 +299,7 @@ public class HomeFragment extends Fragment implements IAsyncCaller {
     private ArrayList<Integer> getFinalCountSelectionList() {
         ArrayList<Integer> strings = new ArrayList<>();
         for (int i = 0; i < count.size(); i++) {
-            if (count.get(i) != 0) {
+            if (count.get(i) != -1) {
                 strings.add(count.get(i));
             }
         }
