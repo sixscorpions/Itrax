@@ -23,5 +23,7 @@ public class APIConstants {
     public static String GET_SALES_OTP = BASE_URL + "getSalesOtp";
     public static String CREATE_SALES_RECORD = BASE_URL + "createSalesRecord";
 
+    public static final String GET_APP_UPDATE_INFO = BASE_URL + "/getAppUpdateInfo";
+
 
 }

@@ -82,4 +82,6 @@
     <string name="search">Search</string>
     <string name="search_icon">&#xE8B6;</string>
     <string name="summery">summary</string>
+
+    <string name="update_version"> A New version is available on playstore. Do you want to install?</string>
 </resources>

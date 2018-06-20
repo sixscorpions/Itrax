@@ -40,4 +40,9 @@ public class Constants {
     public static final String SELECTED_LIST = "SELECTED_LIST";
     public static final String SELECTED_COUNT = "SELECTED_COUNT";
 
+    public static boolean KEY_VERSION_CHECKER ;
+    public static String APPLICATION = "Application";
+    public static String APP_VERSION = "AppVersion";
+    public static String DRIVER = "DRIVER";
+
 }

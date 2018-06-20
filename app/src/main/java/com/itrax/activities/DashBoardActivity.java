@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -36,16 +37,19 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.itrax.BuildConfig;
 import com.itrax.R;
 import com.itrax.aynctask.IAsyncCaller;
 import com.itrax.aynctaskold.ServerIntractorAsync;
 import com.itrax.db.CreateSalesDataSource;
 import com.itrax.db.DatabaseHandler;
 import com.itrax.models.CreateSalesModel;
+import com.itrax.models.GetAppUpdateInfoModel;
 import com.itrax.models.LoginModel;
 import com.itrax.models.Model;
 import com.itrax.models.PostNoteModel;
 import com.itrax.models.SendOtpModel;
+import com.itrax.parser.GetAppUpdateInfoParser;
 import com.itrax.parser.LoginParser;
 import com.itrax.parser.PostNoteParser;
 import com.itrax.parser.SendOtpParser;
@@ -630,6 +634,9 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
                 else
                     Utility.showOKOnlyDialog(DashBoardActivity.this, mSendOtpModel.getMessage(),
                             Utility.getResourcesString(DashBoardActivity.this, R.string.app_name));
+            }else if(model instanceof GetAppUpdateInfoModel){
+                GetAppUpdateInfoModel getAppUpdateInfoModel = (GetAppUpdateInfoModel) model;
+                showUpdatePopup(getAppUpdateInfoModel);
             }
         }
     }
@@ -886,4 +893,65 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
     }
 
 
+    private void getAppUpdateInfo() {
+
+        try {
+            LinkedHashMap linkedHashMap = new LinkedHashMap();
+            linkedHashMap.put(Constants.APPLICATION, Constants.DRIVER);
+            linkedHashMap.put(Constants.APP_VERSION, BuildConfig.VERSION_CODE);
+            GetAppUpdateInfoParser mGetAppUpdateInfoParser = new GetAppUpdateInfoParser();
+            ServerIntractorAsync serverJSONAsyncTask = new ServerIntractorAsync(
+                    this, Utility.getResourcesString(this, R.string.please_wait), true,
+                    APIConstants.GET_APP_UPDATE_INFO, linkedHashMap,
+                    APIConstants.REQUEST_TYPE.POST, this, mGetAppUpdateInfoParser);
+            Utility.execute(serverJSONAsyncTask);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void showUpdatePopup(final GetAppUpdateInfoModel getAppUpdateInfoModel) {
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(
+                this);
+
+        // set title
+        alertDialogBuilder.setTitle("Update");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(Utility.getResourcesString(this, R.string.update_version))
+                .setCancelable(false)
+                .setPositiveButton("Update Now", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final String appPackageName = getPackageName();
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+
+                    }
+                })
+                .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Constants.KEY_VERSION_CHECKER = false;
+                        dialog.dismiss();
+                        if (getAppUpdateInfoModel.isForceToUpdate()) {
+                            moveTaskToBack(true);
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                            System.exit(1);
+                        }
+
+
+                    }
+                });
+
+        // create alert dialog
+        android.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        if (getAppUpdateInfoModel.isForceToUpdate() || getAppUpdateInfoModel.isUpdate())
+            alertDialog.show();
+    }
 }
