@@ -84,4 +84,5 @@
     <string name="summery">summary</string>
 
     <string name="update_version"> A New version is available on playstore. Do you want to install?</string>
+    <string name="press_again_to_exit">Press Again to Exit</string>
 </resources>
