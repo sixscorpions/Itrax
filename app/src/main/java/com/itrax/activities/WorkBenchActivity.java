@@ -1,7 +1,10 @@
 package com.itrax.activities;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,7 +12,18 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.itrax.R;
 import com.itrax.fragments.HomeFragment;
 import com.itrax.utils.Constants;
@@ -19,7 +33,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WorkBenchActivity extends BaseActivity {
+public class WorkBenchActivity extends BaseActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, ResultCallback {
 
     private DrawerLayout drawer_layout;
 
@@ -54,6 +69,10 @@ public class WorkBenchActivity extends BaseActivity {
     TextView tv_phone;
 
     private NavigationView navigationView;
+    protected GoogleApiClient mGoogleApiClient;
+    protected LocationRequest locationRequest;
+    int REQUEST_CHECK_SETTINGS = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +98,22 @@ public class WorkBenchActivity extends BaseActivity {
         String UserName = Utility.getSharedPrefStringData(this, Constants.USER_NAME);
         tv_username.setText("nForce");
 
-         /*USER NAME */
+        /*USER NAME */
         tv_phone.setTypeface(Utility.setRobotoRegular(this));
         String phoneNumber = Utility.getSharedPrefStringData(this, Constants.CONTACT_NUMBER);
         tv_phone.setText(phoneNumber);
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this).build();
+        mGoogleApiClient.connect();
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(30 * 1000);
+        locationRequest.setFastestInterval(5 * 1000);
     }
 
 
@@ -120,5 +151,57 @@ public class WorkBenchActivity extends BaseActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         this.finish();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+        PendingResult result =
+                LocationServices.SettingsApi.checkLocationSettings(
+                        mGoogleApiClient,
+                        builder.build()
+                );
+        result.setResultCallback(this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "GPS is not enabled", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onResult(Result result) {
+        final Status status = result.getStatus();
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                break;
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                try {
+                    status.startResolutionForResult(WorkBenchActivity.this, REQUEST_CHECK_SETTINGS);
+                } catch (IntentSender.SendIntentException e) {
+                }
+                break;
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                break;
+        }
     }
 }

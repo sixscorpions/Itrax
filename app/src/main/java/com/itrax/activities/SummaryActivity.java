@@ -379,9 +379,13 @@ public class SummaryActivity extends BaseActivity implements GoogleApiClient.Con
         CreateSalesModel createSalesModel = new CreateSalesModel();
         JSONArray jsonArray = new JSONArray();
         try {
-
-            jsonArray.put(mCurrentLocation.getLatitude());
-            jsonArray.put(mCurrentLocation.getLongitude());
+            if (mCurrentLocation != null) {
+                jsonArray.put(mCurrentLocation.getLatitude());
+                jsonArray.put(mCurrentLocation.getLongitude());
+            } else {
+                jsonArray.put("");
+                jsonArray.put("");
+            }
 
             createSalesModel.setCoordinates(jsonArray.toString());
             createSalesModel.setArea(location);
@@ -530,12 +534,16 @@ public class SummaryActivity extends BaseActivity implements GoogleApiClient.Con
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDialog.dismiss();
+                stringList = new ArrayList<>();
+                count = new ArrayList<>();
+                HomeFragment.stringList = new ArrayList<>();
+                HomeFragment.count = new ArrayList<>();
                 SummaryActivity.this.finishAffinity();
-                Intent intent = new Intent(
+                /*Intent intent = new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 SummaryActivity.this.startActivity(intent);
                 SummaryActivity.this.finish();
-                System.exit(0);
+                System.exit(0);*/
             }
         });
         mDialog.show();
@@ -557,11 +565,16 @@ public class SummaryActivity extends BaseActivity implements GoogleApiClient.Con
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDialog.dismiss();
-                Intent intent = new Intent(
+                stringList = new ArrayList<>();
+                count = new ArrayList<>();
+                HomeFragment.stringList = new ArrayList<>();
+                HomeFragment.count = new ArrayList<>();
+                SummaryActivity.this.finishAffinity();
+                /*Intent intent = new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 SummaryActivity.this.startActivity(intent);
                 SummaryActivity.this.finish();
-                System.exit(0);
+                System.exit(0);*/
             }
         });
         mDialog.show();

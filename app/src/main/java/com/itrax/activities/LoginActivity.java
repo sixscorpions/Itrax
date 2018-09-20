@@ -44,8 +44,10 @@ public class LoginActivity extends BaseActivity implements IAsyncCaller {
 
         //edtUsername.setText("9652232101");
         //edtPassword.setText("1234");
-        /*edtUsername.setText("7799920200");
+        /*edtUsername.setText("7799920201");
         edtPassword.setText("1234");*/
+        edtUsername.setText("9948041665");
+        edtPassword.setText("1234");
     }
 
     private void getLocationPermission() {

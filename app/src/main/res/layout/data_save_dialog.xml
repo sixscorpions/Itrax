@@ -36,7 +36,8 @@
         android:text="@string/switch_off_your_location_to_save_battery"
         android:textColor="@color/dialogAccept"
         android:textSize="@dimen/_18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_ok"

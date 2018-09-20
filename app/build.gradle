@@ -28,7 +28,7 @@ android {
         nforce {
             applicationId 'com.nforce'
             versionName '2.0'
-            versionCode 4
+            versionCode 5
         }
     }
 }

@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment implements IAsyncCaller {
     public static EditText edt_mobile_number;
     private LoginModel mLoginModel;
     public static ArrayList<Integer> count = new ArrayList<>();
-    private static ArrayList<String> stringList;
+    public static ArrayList<String> stringList;
     public static SpinnerDialogAdapterForMedicines adapter;
     public static ArrayList<EditText> views = new ArrayList<>();
 

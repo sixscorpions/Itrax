@@ -674,11 +674,12 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDialog.dismiss();
-                Intent intent = new Intent(
+                DashBoardActivity.this.finish();
+                /*Intent intent = new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 DashBoardActivity.this.startActivity(intent);
                 DashBoardActivity.this.finish();
-                System.exit(0);
+                System.exit(0);*/
             }
         });
         mDialog.show();
@@ -700,11 +701,12 @@ public class DashBoardActivity extends BaseActivity implements GoogleApiClient.C
         ((TextView) mDialog.findViewById(R.id.tv_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mDialog.dismiss();
-                Intent intent = new Intent(
+                DashBoardActivity.this.finish();
+                /*Intent intent = new Intent(
                         android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 DashBoardActivity.this.startActivity(intent);
                 DashBoardActivity.this.finish();
-                System.exit(0);
+                System.exit(0);*/
             }
         });
         mDialog.show();
